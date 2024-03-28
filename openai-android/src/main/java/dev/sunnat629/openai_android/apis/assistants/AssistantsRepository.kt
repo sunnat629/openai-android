@@ -4,8 +4,11 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-data class MockResponse(val result: String)
+@Serializable
+data class MockResponse(@SerialName val result: String)
 
 interface AssistantsRepository {
 

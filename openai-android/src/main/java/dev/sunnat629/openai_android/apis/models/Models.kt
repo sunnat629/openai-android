@@ -1,6 +1,6 @@
 package dev.sunnat629.openai_android.apis.models
 
-enum class Models(val modelName: String) {
+enum class OpenAIModel(val id: String) {
     GPT_4_0125_PREVIEW("gpt-4-0125-preview"),
     GPT_4_TURBO_PREVIEW("gpt-4-turbo-preview"),
     GPT_4_1106_PREVIEW("gpt-4-1106-preview"),
@@ -31,5 +31,7 @@ enum class Models(val modelName: String) {
     BABBAGE_002("babbage-002"),
     DAVINCI_002("davinci-002");
 
-    override fun toString(): String = modelName
+    companion object {
+        fun fromId(id: String): OpenAIModel? = entries.find { it.id == id }
+    }
 }

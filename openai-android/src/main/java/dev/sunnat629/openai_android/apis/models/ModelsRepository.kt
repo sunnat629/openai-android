@@ -11,7 +11,7 @@ interface ModelsRepository {
     // Models Operations
     suspend fun listModels(): MockResponse
     suspend fun getModelDetails(modelId: String): MockResponse
-    suspend fun deleteModel(modelId: String): MockResponse
+    suspend fun deleteFineTunedModel(modelId: String): MockResponse
 }
 
 class ModelsRepositoryImpl(private val client: HttpClient): ModelsRepository {
@@ -19,5 +19,5 @@ class ModelsRepositoryImpl(private val client: HttpClient): ModelsRepository {
 
    override suspend fun listModels(): MockResponse = client.get(baseUrl) { }
     override suspend fun getModelDetails(modelId: String): MockResponse = client.get("$baseUrl/$modelId") { }
-    override suspend fun deleteModel(modelId: String): MockResponse = client.delete("$baseUrl/$modelId") { }
+    override suspend fun deleteFineTunedModel(modelId: String): MockResponse = client.delete("$baseUrl/$modelId") { }
 }

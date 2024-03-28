@@ -5,7 +5,7 @@ import dev.sunnat629.openai_android.apis.assistants.AssistantsRepositoryImpl
 import dev.sunnat629.openai_android.apis.audio.AudioRepository
 import dev.sunnat629.openai_android.apis.audio.AudioRepositoryImpl
 import dev.sunnat629.openai_android.apis.chats.ChatRepositoryImpl
-import dev.sunnat629.openai_android.apis.chats.ChatsRepository
+import dev.sunnat629.openai_android.apis.chats.ChatRepository
 import dev.sunnat629.openai_android.apis.embeddings.EmbeddingsRepository
 import dev.sunnat629.openai_android.apis.embeddings.EmbeddingsRepositoryImpl
 import dev.sunnat629.openai_android.apis.files.FilesRepository
@@ -22,14 +22,6 @@ import dev.sunnat629.openai_android.apis.threadsMessages.ThreadsMessagesReposito
 import dev.sunnat629.openai_android.apis.threadsMessages.ThreadsMessagesRepositoryImpl
 import dev.sunnat629.openai_android.networks.KTorNetwork.provideHttpClient
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
-import io.ktor.client.plugins.DefaultRequest
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.header
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -48,7 +40,7 @@ val openAiAndroidLibModule = module {
 
     // Repository implementations
     single<AudioRepository> { AudioRepositoryImpl(get()) }
-    single<ChatsRepository> { ChatRepositoryImpl(get()) }
+    single<ChatRepository> { ChatRepositoryImpl(get()) }
     single<EmbeddingsRepository> { EmbeddingsRepositoryImpl(get()) }
     single<FineTuningRepository> { FineTuningRepositoryImpl(get()) }
     single<FilesRepository> { FilesRepositoryImpl(get()) }
