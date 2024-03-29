@@ -1,5 +1,7 @@
-package dev.sunnat629.openai_android.apis.chats
+package dev.sunnat629.openai_android.models.chats
 
+import dev.sunnat629.openai_android.apis.chats.ChatChoice
+import dev.sunnat629.openai_android.apis.chats.Message
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 

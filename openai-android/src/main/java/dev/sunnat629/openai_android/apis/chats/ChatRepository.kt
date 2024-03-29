@@ -1,22 +1,13 @@
 package dev.sunnat629.openai_android.apis.chats
 
+import dev.sunnat629.openai_android.models.chats.ChatImageFunctionsRequest
+import dev.sunnat629.openai_android.models.chats.ChatImageInputRequest
+import dev.sunnat629.openai_android.models.chats.ChatImageInputResponse
+import dev.sunnat629.openai_android.models.chats.ChatImageStreamingRequest
+import dev.sunnat629.openai_android.models.chats.ChatImageStreamingResponse
 import dev.sunnat629.openai_android.networks.ApiResult
 import dev.sunnat629.openai_android.networks.postRequest
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.call.receive
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.ServerResponseException
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.request
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.ktor.http.isSuccess
-import kotlinx.coroutines.flow.Flow
 
 data class MockResponse(val result: String)
 

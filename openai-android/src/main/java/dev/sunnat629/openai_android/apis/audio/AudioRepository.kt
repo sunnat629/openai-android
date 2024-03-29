@@ -1,5 +1,13 @@
 package dev.sunnat629.openai_android.apis.audio
 
+import dev.sunnat629.openai_android.models.audio.CreateSpeechRequest
+import dev.sunnat629.openai_android.models.audio.CreateSpeechResponse
+import dev.sunnat629.openai_android.models.audio.CreateTranscriptionRequest
+import dev.sunnat629.openai_android.models.audio.CreateTranscriptionResponse
+import dev.sunnat629.openai_android.models.audio.CreateTranslationRequest
+import dev.sunnat629.openai_android.models.audio.CreateTranslationResponse
+import dev.sunnat629.openai_android.networks.ApiResult
+import dev.sunnat629.openai_android.networks.postRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 
@@ -7,19 +15,31 @@ data class MockResponse(val result: String)
 
 interface AudioRepository {
 
-    // Audio Operations
-    suspend fun createAudioSpeech(): MockResponse
-    suspend fun createAudioTranscription(): MockResponse
-    suspend fun createAudioTranslation(): MockResponse
+    suspend fun createSpeech(request: CreateSpeechRequest): ApiResult<CreateSpeechResponse>
+    suspend fun createTranscription(request: CreateTranscriptionRequest): ApiResult<CreateTranscriptionResponse>
+    suspend fun createTranslation(request: CreateTranslationRequest): ApiResult<CreateTranslationResponse>
 }
 
-class AudioRepositoryImpl(private val client: HttpClient): AudioRepository {
-    private val baseUrl = "https://api.openai.com/v1/audio"
+class AudioRepositoryImpl(private val client: HttpClient) : AudioRepository {
 
-    override suspend fun createAudioSpeech(): MockResponse = client.post("$baseUrl/speech") { /* Request body */ }
-    override suspend fun createAudioTranscription(): MockResponse =
-        client.post("$baseUrl/transcriptions") { /* Request body */ }
+    override suspend fun createSpeech(request: CreateSpeechRequest): ApiResult<CreateSpeechResponse> {
+        return client.postRequest(
+            url = "https://api.openai.com/v1/audio/speech",
+            request = request
+        )
+    }
 
-    override suspend fun createAudioTranslation(): MockResponse =
-        client.post("$baseUrl/translations") { /* Request body */ }
+    override suspend fun createTranscription(request: CreateTranscriptionRequest): ApiResult<CreateTranscriptionResponse> {
+        return client.postRequest(
+            url = "https://api.openai.com/v1/audio/transcriptions",
+            request = request
+        )
+    }
+
+    override suspend fun createTranslation(request: CreateTranslationRequest): ApiResult<CreateTranslationResponse> {
+        return client.postRequest(
+            url = "https://api.openai.com/v1/audio/translations",
+            request = request
+        )
+    }
 }

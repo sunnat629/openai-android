@@ -1,5 +1,7 @@
-package dev.sunnat629.openai_android.apis.chats
+package dev.sunnat629.openai_android.models.chats
 
+import dev.sunnat629.openai_android.apis.chats.ChatMessageDelta
+import dev.sunnat629.openai_android.apis.chats.ChatStreamingChoice
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

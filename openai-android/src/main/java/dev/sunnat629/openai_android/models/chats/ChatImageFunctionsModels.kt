@@ -1,5 +1,9 @@
-package dev.sunnat629.openai_android.apis.chats
+package dev.sunnat629.openai_android.models.chats
 
+import dev.sunnat629.openai_android.apis.chats.FunctionParameterProperty
+import dev.sunnat629.openai_android.apis.chats.FunctionParameters
+import dev.sunnat629.openai_android.apis.chats.FunctionTool
+import dev.sunnat629.openai_android.apis.chats.ToolFunction
 import kotlinx.serialization.*
 
 /**

@@ -1,5 +1,6 @@
 package dev.sunnat629.openai_android.apis.chats
 
+import dev.sunnat629.openai_android.models.chats.ChatMessage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
