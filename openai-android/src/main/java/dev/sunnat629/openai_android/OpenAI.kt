@@ -4,5 +4,5 @@
  * Copyright ©2024 Sunnat629.dev. All rights reserved.
  */
 
-package dev.sunnat629.openai_android
+dev.sunnat629.openai_android
 
