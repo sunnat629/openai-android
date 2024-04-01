@@ -13,13 +13,14 @@ import kotlinx.serialization.Serializable
 data class ModelResponse(
     @SerialName("id") val id: String,
     @SerialName("object") val objectContent: String,
-    @SerialName("created_at") val createdAt: Long,
-    @SerialName("name") val name: String
+    @SerialName("created") val created: Long,
+    @SerialName("owned_by") val ownedBy: String
 )
 
 @Serializable
 data class ListModelsResponse(
-    @SerialName("data") val data: List<ModelResponse>
+    @SerialName("data") val data: List<ModelResponse>,
+    @SerialName("object") val objectContent: String,
 )
 
 enum class OpenAIModel(val id: String) {

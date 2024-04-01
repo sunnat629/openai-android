@@ -55,12 +55,8 @@ dependencies {
     implementation(platform("io.insert-koin:koin-bom:3.6.0-wasm-alpha2"))
 
     // Koin core features for Android
-    implementation("io.insert-koin:koin-android")
-    // Koin logger for debug purposes
-    implementation("io.insert-koin:koin-logger-slf4j")
-    // Koin extension for working with coroutines
+    implementation("io.insert-koin:koin-core")
     implementation("io.insert-koin:koin-core-coroutines")
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -33,12 +33,3 @@ class OpenAIBuilder(apiKey: String) {
 
     fun build(): OpenAI { return OpenAIImpl(config) }
 }
-
-// Usage
-val openAI = OpenAIBuilder("your_api_key")
-    .setRefreshToken("your_refresh_token")
-    .setOrganization("your_organization")
-    .setHeaders(mapOf("Custom-Header" to "Value"))
-    .setLogging(LoggingNetwork())
-    .setRetry(RetryNetwork())
-    .build()

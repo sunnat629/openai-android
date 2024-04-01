@@ -39,8 +39,17 @@ fun openAiAndroidLibModuleKoin(configModel: OpenAIBuilderConfig) {
     // or provide it for the host app to call at an appropriate time.
     startKoin {
         // App declares its own modules, plus the library's modules
-        modules(openAiAndroidLibModule(configModel))
+        modules(
+            listOf(
+                openAIModule,
+                openAiAndroidLibModule(configModel),
+            )
+        )
     }
+}
+
+val openAIModule = module {
+    single<OpenAI> { OpenAIImpl(get()) }
 }
 
 fun openAiAndroidLibModule(configModel: OpenAIBuilderConfig) = module {
