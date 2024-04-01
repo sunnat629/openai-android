@@ -1,6 +1,13 @@
-package dev.sunnat629.openai_android.models.threadsMessages
+/**
+ * @author  Mohi Us Sunnat
+ * @date    01.04.24
+ * Copyright ©2024 Sunnat629.dev. All rights reserved.
+ */
 
-import kotlinx.serialization.*
+package dev.sunnat629.openai_android.models.messages
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Request model for creating a new message within a thread.
@@ -23,8 +30,8 @@ data class CreateMessageRequest(
  * @param content The content of the message.
  */
 data class MessageResponse(
-@SerialName("id") val id: String,
-@SerialName("object") val objectContent: String,
+    @SerialName("id") val id: String,
+    @SerialName("object") val objectContent: String,
     @SerialName("thread") val thread: String,
-@SerialName("content") val content: String
+    @SerialName("content") val content: String
 )
