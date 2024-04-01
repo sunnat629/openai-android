@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import dev.sunnat629.openai_android.models.chats.ChatContent
 import dev.sunnat629.openai_android.models.chats.ChatRequest
+import dev.sunnat629.openai_android.models.chats.ChatContent
+import dev.sunnat629.openai_android.models.chats.ChatMessage
+import dev.sunnat629.openai_android.models.chats.ChatRequest
+import dev.sunnat629.openai_android.models.chats.TextContent
 import dev.sunnat629.openai_android.networks.onFailure
 import dev.sunnat629.openai_android.networks.onSuccess
 import dev.sunnat629.openai_android.ui.theme.OpenAiAndroidTheme
@@ -43,23 +48,54 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-//                    LaunchedEffect(Unit) {
-//                        lifecycleScope.launch {
-//                            openAI.retrieveModel("gpt-3.5-turbo")
-//                                .onSuccess {
-//                                    model.value = "Success: ${it.id}"
-//                                    Log.d("ASDF", it.toString())
-//                                }
-//                                .onFailure {
-//                                    model.value = "Failure: ${it.message}"
-//                                    Log.e("ASDF", it.toString())
-//                                }
-//                        }
-//                    }
+                    LaunchedEffect(Unit) {
+                        lifecycleScope.launch {
+                            openAI.retrieveModel("dall-e-2")
+                                .onSuccess {
+                                    model.value = "Success: ${it.id}"
+                                    Log.d("ASDF", it.toString())
+                                }
+                                .onFailure {
+                                    model.value = "Failure: ${it.message}"
+                                    Log.e("ASDF", it.toString())
+                                }
+                        }
+                    }
 
 
                     LaunchedEffect(Unit) {
                         lifecycleScope.launch {
+                            openAI.chat(
+                                ChatRequest(
+                                    model = "gpt-3.5-turbo",
+                                    messages = listOf(
+                                        ChatContent.createTextMessage(
+                                            role = "user",
+                                            content = "Tell me something yourself",
+                                        )
+                                    ),
+                                )
+                            )
+                                .onSuccess {
+                                    chat.value = "${it.choices[0].message.role}: ${it.choices[0].message.content}"
+                                    Log.d("ASDF", it.toString())
+                                }
+                                .onFailure {
+                                    chat.value = "Failure: ${it.message}"
+                                    Log.e("ASDF", it.toString())
+                                }
+                        }
+                    }
+
+                    Column {
+                        Text(
+                            text = model.value,
+                        )
+
+                        Text(
+                            text = chat.value,
+                        )
+                    }
                             openAI.chat
                                 .model("gpt-3.5-turbo")
                                 .role("user")
