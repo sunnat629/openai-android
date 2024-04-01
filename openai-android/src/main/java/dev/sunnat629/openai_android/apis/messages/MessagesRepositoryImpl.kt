@@ -7,6 +7,8 @@
 package dev.sunnat629.openai_android.apis.messages
 
 import dev.sunnat629.openai_android.models.messages.CreateMessageRequest
+import dev.sunnat629.openai_android.models.messages.ListMessageFilesResponse
+import dev.sunnat629.openai_android.models.messages.MessageFileDetails
 import dev.sunnat629.openai_android.models.messages.MessageResponse
 import dev.sunnat629.openai_android.networks.ApiResult
 import dev.sunnat629.openai_android.networks.getRequest
@@ -40,5 +42,20 @@ class MessageRepositoryImpl(private val httpClient: HttpClient) : MessageReposit
         return httpClient.getRequest(
             url = "$baseUrl/$threadId/messages/$messageId"
         )
+    }
+
+    override suspend fun listMessageFiles(
+        threadId: String,
+        messageId: String
+    ): ApiResult<ListMessageFilesResponse> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun retrieveMessageFile(
+        threadId: String,
+        messageId: String,
+        fileId: String
+    ): ApiResult<MessageFileDetails> {
+        TODO("Not yet implemented")
     }
 }
