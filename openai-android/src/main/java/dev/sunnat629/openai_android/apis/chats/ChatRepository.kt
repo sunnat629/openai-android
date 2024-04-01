@@ -3,13 +3,12 @@ package dev.sunnat629.openai_android.apis.chats
 import dev.sunnat629.openai_android.models.chats.ChatImageFunctionsRequest
 import dev.sunnat629.openai_android.models.chats.ChatImageInputRequest
 import dev.sunnat629.openai_android.models.chats.ChatImageInputResponse
+import dev.sunnat629.openai_android.models.chats.ChatImageLogprobsRequest
 import dev.sunnat629.openai_android.models.chats.ChatImageStreamingRequest
 import dev.sunnat629.openai_android.models.chats.ChatImageStreamingResponse
 import dev.sunnat629.openai_android.networks.ApiResult
 import dev.sunnat629.openai_android.networks.postRequest
 import io.ktor.client.HttpClient
-
-data class MockResponse(val result: String)
 
 interface ChatRepository {
 

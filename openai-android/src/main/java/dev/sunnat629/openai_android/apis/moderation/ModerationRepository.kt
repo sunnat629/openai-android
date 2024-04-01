@@ -1,18 +1,21 @@
 package dev.sunnat629.openai_android.apis.moderation
 
+import dev.sunnat629.openai_android.networks.ApiResult
+import dev.sunnat629.openai_android.networks.postRequest
 import io.ktor.client.HttpClient
-import io.ktor.client.request.post
 
-data class MockResponse(val result: String)
-
-interface ModerationRepository {
-
-    // Moderation Operations
-    suspend fun createModeration(): MockResponse
+interface ModerationsRepository {
+    suspend fun createModeration(request: Any): ApiResult<Any>
 }
 
-class ModerationRepositoryImpl(private val client: HttpClient): ModerationRepository {
+class ModerationsRepositoryImpl(private val httpClient: HttpClient) : ModerationsRepository {
+
     private val baseUrl = "https://api.openai.com/v1/moderations"
 
-    override suspend fun createModeration(): MockResponse = client.post(baseUrl) { /* Request body */ }
+    override suspend fun createModeration(request: Any): ApiResult<Any> {
+        return httpClient.postRequest(
+            url = baseUrl,
+            request = request
+        )
+    }
 }

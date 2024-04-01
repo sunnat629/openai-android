@@ -1,7 +1,7 @@
-package dev.sunnat629.openai_android.apis.embeddings
+package dev.sunnat629.openai_android.models.embeddings
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Request model for creating text embeddings.

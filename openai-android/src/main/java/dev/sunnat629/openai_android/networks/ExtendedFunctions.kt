@@ -1,13 +1,13 @@
 package dev.sunnat629.openai_android.networks
 
-import dev.sunnat629.openai_android.apis.embeddings.CreateEmbeddingsResponse
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.request.*
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.utils.EmptyContent.contentType
-import io.ktor.http.*
+import io.ktor.client.request.request
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -16,6 +16,11 @@ import kotlinx.coroutines.withContext
 suspend inline fun <reified T> HttpClient.getRequest(
     url: String
 ): ApiResult<T> = makeRequest(HttpMethod.Get, url)
+
+suspend inline fun <reified T> HttpClient.patchRequest(
+    url: String,
+    request: Any
+): ApiResult<T> = makeRequest(HttpMethod.Post, url, body = request)
 
 suspend inline fun <reified T> HttpClient.postRequest(
     url: String,

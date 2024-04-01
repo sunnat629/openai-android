@@ -1,6 +1,7 @@
 package dev.sunnat629.openai_android.models.chats
 
-import kotlinx.serialization.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Request model for submitting chat completions with image inputs.

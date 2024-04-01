@@ -9,9 +9,6 @@ import dev.sunnat629.openai_android.models.audio.CreateTranslationResponse
 import dev.sunnat629.openai_android.networks.ApiResult
 import dev.sunnat629.openai_android.networks.postRequest
 import io.ktor.client.HttpClient
-import io.ktor.client.request.post
-
-data class MockResponse(val result: String)
 
 interface AudioRepository {
 

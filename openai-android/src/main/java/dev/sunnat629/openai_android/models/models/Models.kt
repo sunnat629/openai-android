@@ -1,4 +1,20 @@
-package dev.sunnat629.openai_android.apis.models
+package dev.sunnat629.openai_android.models.models
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ModelResponse(
+    @SerialName("id") val id: String,
+    @SerialName("object") val objectContent: String,
+    @SerialName("created_at") val createdAt: Long,
+    @SerialName("name") val name: String
+)
+
+@Serializable
+data class ListModelsResponse(
+    @SerialName("data") val data: List<ModelResponse>
+)
 
 enum class OpenAIModel(val id: String) {
     GPT_4_0125_PREVIEW("gpt-4-0125-preview"),

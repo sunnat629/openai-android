@@ -1,23 +1,28 @@
 package dev.sunnat629.openai_android.apis.models
 
+import dev.sunnat629.openai_android.models.models.ListModelsResponse
+import dev.sunnat629.openai_android.models.models.ModelResponse
+import dev.sunnat629.openai_android.networks.ApiResult
+import dev.sunnat629.openai_android.networks.getRequest
 import io.ktor.client.HttpClient
-import io.ktor.client.request.delete
-import io.ktor.client.request.get
-
-data class MockResponse(val result: String)
 
 interface ModelsRepository {
-
-    // Models Operations
-    suspend fun listModels(): MockResponse
-    suspend fun getModelDetails(modelId: String): MockResponse
-    suspend fun deleteFineTunedModel(modelId: String): MockResponse
+    suspend fun listModels(): ApiResult<ListModelsResponse>
+    suspend fun retrieveModel(modelId: String): ApiResult<ModelResponse>
 }
 
-class ModelsRepositoryImpl(private val client: HttpClient): ModelsRepository {
+class ModelsRepositoryImpl(private val httpClient: HttpClient) : ModelsRepository {
     private val baseUrl = "https://api.openai.com/v1/models"
 
-   override suspend fun listModels(): MockResponse = client.get(baseUrl) { }
-    override suspend fun getModelDetails(modelId: String): MockResponse = client.get("$baseUrl/$modelId") { }
-    override suspend fun deleteFineTunedModel(modelId: String): MockResponse = client.delete("$baseUrl/$modelId") { }
+    override suspend fun listModels(): ApiResult<ListModelsResponse> {
+        return httpClient.getRequest(
+            url = baseUrl
+        )
+    }
+
+    override suspend fun retrieveModel(modelId: String): ApiResult<ModelResponse> {
+        return httpClient.getRequest(
+            url = "$baseUrl/$modelId"
+        )
+    }
 }

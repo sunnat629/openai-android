@@ -1,6 +1,7 @@
 package dev.sunnat629.openai_android.models.audio
 
-import kotlinx.serialization.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Request model for generating speech from text.

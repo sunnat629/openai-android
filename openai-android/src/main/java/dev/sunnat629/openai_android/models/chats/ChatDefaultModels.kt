@@ -1,9 +1,8 @@
 package dev.sunnat629.openai_android.models.chats
 
-import dev.sunnat629.openai_android.apis.chats.ChatChoice
-import dev.sunnat629.openai_android.apis.chats.Message
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 /**
  * Request model for creating a chat completion.
