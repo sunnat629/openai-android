@@ -28,23 +28,24 @@ import dev.sunnat629.openai_android.apis.moderation.ModerationsRepository
 import dev.sunnat629.openai_android.apis.moderation.ModerationsRepositoryImpl
 import dev.sunnat629.openai_android.apis.threads.ThreadRepository
 import dev.sunnat629.openai_android.apis.threads.ThreadRepositoryImpl
-import dev.sunnat629.openai_android.networks.KTorNetwork.provideHttpClient
+import dev.sunnat629.openai_android.models.openaAI.OpenAIBuilderConfig
+import dev.sunnat629.openai_android.networks.openAiHttpClient
 import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-fun openAiAndroidLibModuleKoin() {
+fun openAiAndroidLibModuleKoin(configModel: OpenAIBuilderConfig) {
     // This starts Koin for your library. You might call this from your library's initialization logic,
     // or provide it for the host app to call at an appropriate time.
     startKoin {
         // App declares its own modules, plus the library's modules
-        modules(openAiAndroidLibModule)
+        modules(openAiAndroidLibModule(configModel))
     }
 }
 
-val openAiAndroidLibModule = module {
+fun openAiAndroidLibModule(configModel: OpenAIBuilderConfig) = module {
     // Provide HttpClient
-    single<HttpClient> { provideHttpClient() }
+    single<HttpClient> { openAiHttpClient(configModel) }
 
     // Repository implementations
     single<AudioRepository> { AudioRepositoryImpl(get()) }

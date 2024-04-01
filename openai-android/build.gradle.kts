@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    kotlin("plugin.serialization") version "1.9.22"
+    alias(libs.plugins.kotlinxSerialization)
+    id("com.google.devtools.ksp") version "1.9.23-1.0.19" apply false
 }
 
 android {
@@ -39,15 +40,16 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    implementation("io.ktor:ktor-client-core:2.3.9")
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.9")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.9")
-    // Ensure you include the client engine for your platform, e.g., for Android:
-    implementation("io.ktor:ktor-client-android:2.3.9")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.auth)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
 
     // Import the Koin BOM
     implementation(platform("io.insert-koin:koin-bom:3.6.0-wasm-alpha2"))
@@ -63,6 +65,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-
 }
