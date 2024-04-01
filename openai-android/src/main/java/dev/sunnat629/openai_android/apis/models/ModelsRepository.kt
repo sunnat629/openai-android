@@ -9,8 +9,6 @@ package dev.sunnat629.openai_android.apis.models
 import dev.sunnat629.openai_android.models.models.ListModelsResponse
 import dev.sunnat629.openai_android.models.models.ModelResponse
 import dev.sunnat629.openai_android.networks.ApiResult
-import dev.sunnat629.openai_android.networks.getRequest
-import io.ktor.client.HttpClient
 
 interface ModelsRepository {
 

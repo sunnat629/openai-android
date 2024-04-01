@@ -14,9 +14,9 @@ import dev.sunnat629.openai_android.networks.postRequest
 import io.ktor.client.HttpClient
 
 class MessageRepositoryImpl(private val httpClient: HttpClient) : MessageRepository {
-    
+
     private val baseUrl = "https://api.openai.com/v1/threads"
-    
+
     override suspend fun createMessage(
         threadId: String,
         request: CreateMessageRequest

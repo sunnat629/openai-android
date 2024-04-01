@@ -9,9 +9,6 @@ package dev.sunnat629.openai_android.apis.threads
 import dev.sunnat629.openai_android.models.threads.CreateThreadRequest
 import dev.sunnat629.openai_android.models.threads.ThreadResponse
 import dev.sunnat629.openai_android.networks.ApiResult
-import dev.sunnat629.openai_android.networks.getRequest
-import dev.sunnat629.openai_android.networks.postRequest
-import io.ktor.client.HttpClient
 
 // ThreadRepository.kt
 interface ThreadRepository {

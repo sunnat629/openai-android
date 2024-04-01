@@ -35,3 +35,22 @@ data class MessageResponse(
     @SerialName("thread") val thread: String,
     @SerialName("content") val content: String
 )
+
+/**
+ * Response model for listing files associated with a specific message.
+ */
+@Serializable
+data class ListMessageFilesResponse(
+    @SerialName("data") val data: List<MessageFileDetails>
+)
+
+/**
+ * Details of a file associated with a message.
+ */
+@Serializable
+data class MessageFileDetails(
+    @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
+    @SerialName("created_at") val createdAt: String, // Assuming ISO 8601 format
+    @SerialName("file_type") val fileType: String
+)

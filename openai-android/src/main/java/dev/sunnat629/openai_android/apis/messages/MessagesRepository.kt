@@ -7,11 +7,10 @@
 package dev.sunnat629.openai_android.apis.messages
 
 import dev.sunnat629.openai_android.models.messages.CreateMessageRequest
+import dev.sunnat629.openai_android.models.messages.MessageFileDetails
+import dev.sunnat629.openai_android.models.messages.ListMessageFilesResponse
 import dev.sunnat629.openai_android.models.messages.MessageResponse
 import dev.sunnat629.openai_android.networks.ApiResult
-import dev.sunnat629.openai_android.networks.getRequest
-import dev.sunnat629.openai_android.networks.postRequest
-import io.ktor.client.HttpClient
 
 
 // MessageRepository.kt
@@ -27,4 +26,27 @@ interface MessageRepository {
 
     /** Retrieves a message by ID */
     suspend fun retrieveMessage(threadId: String, messageId: String): ApiResult<MessageResponse>
+
+    /**
+     * Lists all files associated with a specific message in a thread.
+     *
+     * @param threadId The unique identifier of the thread containing the message.
+     * @param messageId The unique identifier of the message associated with the files.
+     * @return A list of file details.
+     */
+    suspend fun listMessageFiles(threadId: String, messageId: String): ApiResult<ListMessageFilesResponse>
+
+    /**
+     * Retrieves details for a specific file associated with a message in a thread.
+     *
+     * Note: If the API returns the file content directly for retrieval,
+     * this method might need to return a different type (e.g., ByteArray for binary data).
+     *
+     * @param threadId The unique identifier of the thread containing the message.
+     * @param messageId The unique identifier of the message associated with the file.
+     * @param fileId The unique identifier of the file to retrieve.
+     * @return The details of the specified file.
+     */
+    suspend fun retrieveMessageFile(threadId: String, messageId: String, fileId: String): ApiResult<MessageFileDetails>
+
 }
