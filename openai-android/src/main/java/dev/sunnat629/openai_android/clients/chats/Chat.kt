@@ -7,6 +7,7 @@
 package dev.sunnat629.openai_android.clients.chats
 
 import dev.sunnat629.openai_android.apis.chats.ChatRepository
+import dev.sunnat629.openai_android.clients.BaseUseCases
 import dev.sunnat629.openai_android.models.chats.ChatContent
 import dev.sunnat629.openai_android.models.chats.ChatMessage
 import dev.sunnat629.openai_android.models.chats.ChatRequest
@@ -15,15 +16,10 @@ import dev.sunnat629.openai_android.models.chats.ImageContent
 import dev.sunnat629.openai_android.models.chats.TextContent
 import dev.sunnat629.openai_android.networks.ApiResult
 
-interface Chat {
+interface Chat: BaseUseCases {
 
-    fun model(model: String): Chat
-    fun role(role: String): Chat
-    fun text(text: String): Chat
-    fun imageUrl(imageUrl: String): Chat
     suspend fun create(): ApiResult<ChatResponse>
 }
-
 
 internal class ChatImpl(private val repository: ChatRepository) : Chat {
 
