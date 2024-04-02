@@ -30,6 +30,8 @@ import dev.sunnat629.openai_android.apis.threads.ThreadRepository
 import dev.sunnat629.openai_android.apis.threads.ThreadRepositoryImpl
 import dev.sunnat629.openai_android.clients.chats.Chat
 import dev.sunnat629.openai_android.clients.chats.ChatImpl
+import dev.sunnat629.openai_android.clients.models.Models
+import dev.sunnat629.openai_android.clients.models.ModelsImpl
 import dev.sunnat629.openai_android.models.openaAI.OpenAIBuilderConfig
 import dev.sunnat629.openai_android.networks.openAiHttpClient
 import io.ktor.client.HttpClient
@@ -58,6 +60,7 @@ val openAIModule = module {
 
 val useCaseModule = module {
     factory<Chat> { ChatImpl(get()) }
+    factory<Models> { ModelsImpl(get()) }
 }
 
 fun openAiAndroidLibModule(configModel: OpenAIBuilderConfig) = module {

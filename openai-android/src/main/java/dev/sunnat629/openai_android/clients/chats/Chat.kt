@@ -16,7 +16,7 @@ import dev.sunnat629.openai_android.models.chats.ImageContent
 import dev.sunnat629.openai_android.models.chats.TextContent
 import dev.sunnat629.openai_android.networks.ApiResult
 
-interface Chat: BaseUseCases {
+interface Chat : BaseUseCases<Chat> {
 
     suspend fun create(): ApiResult<ChatResponse>
 }

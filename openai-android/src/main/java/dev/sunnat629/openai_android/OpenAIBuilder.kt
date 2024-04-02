@@ -31,5 +31,7 @@ class OpenAIBuilder(apiKey: String) {
         retry = retry
     )
 
-    fun build(): OpenAI { return OpenAIImpl(config) }
+    fun build(): OpenAI {
+        return OpenAIImpl(config)
+    }
 }

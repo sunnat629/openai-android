@@ -7,8 +7,8 @@
 package dev.sunnat629.openai_android.apis.messages
 
 import dev.sunnat629.openai_android.models.messages.CreateMessageRequest
-import dev.sunnat629.openai_android.models.messages.MessageFileDetails
 import dev.sunnat629.openai_android.models.messages.ListMessageFilesResponse
+import dev.sunnat629.openai_android.models.messages.MessageFileDetails
 import dev.sunnat629.openai_android.models.messages.MessageResponse
 import dev.sunnat629.openai_android.networks.ApiResult
 
@@ -34,7 +34,10 @@ interface MessageRepository {
      * @param messageId The unique identifier of the message associated with the files.
      * @return A list of file details.
      */
-    suspend fun listMessageFiles(threadId: String, messageId: String): ApiResult<ListMessageFilesResponse>
+    suspend fun listMessageFiles(
+        threadId: String,
+        messageId: String
+    ): ApiResult<ListMessageFilesResponse>
 
     /**
      * Retrieves details for a specific file associated with a message in a thread.
@@ -47,6 +50,10 @@ interface MessageRepository {
      * @param fileId The unique identifier of the file to retrieve.
      * @return The details of the specified file.
      */
-    suspend fun retrieveMessageFile(threadId: String, messageId: String, fileId: String): ApiResult<MessageFileDetails>
+    suspend fun retrieveMessageFile(
+        threadId: String,
+        messageId: String,
+        fileId: String
+    ): ApiResult<MessageFileDetails>
 
 }

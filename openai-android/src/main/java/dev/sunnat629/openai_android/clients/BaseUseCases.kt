@@ -1,9 +1,10 @@
 package dev.sunnat629.openai_android.clients
 
-interface BaseUseCases {
 
-    fun model(model: String): BaseUseCases
-    fun role(role: String): BaseUseCases
-    fun text(text: String): BaseUseCases
-    fun imageUrl(imageUrl: String): BaseUseCases
+interface BaseUseCases<T> {
+
+    fun model(model: String): T
+    fun role(role: String): T
+    fun text(text: String): T
+    fun imageUrl(imageUrl: String): T
 }

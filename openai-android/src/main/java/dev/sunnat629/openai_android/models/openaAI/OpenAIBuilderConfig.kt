@@ -6,7 +6,7 @@
 
 package dev.sunnat629.openai_android.models.openaAI
 
-import kotlinx.serialization.*
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**

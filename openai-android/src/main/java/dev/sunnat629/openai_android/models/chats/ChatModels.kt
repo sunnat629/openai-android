@@ -134,7 +134,11 @@ sealed class ChatContent {
             )
         }
 
-        fun createMixedMessage(role: String, texts: List<String>, imageUrls: List<String>): ChatMessage {
+        fun createMixedMessage(
+            role: String,
+            texts: List<String>,
+            imageUrls: List<String>
+        ): ChatMessage {
             val mixedContent = texts.map { TextContent(it) } + imageUrls.map { ImageContent(it) }
             return ChatMessage(
                 role = role,
