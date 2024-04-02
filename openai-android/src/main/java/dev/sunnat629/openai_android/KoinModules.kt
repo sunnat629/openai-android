@@ -28,6 +28,8 @@ import dev.sunnat629.openai_android.apis.moderation.ModerationsRepository
 import dev.sunnat629.openai_android.apis.moderation.ModerationsRepositoryImpl
 import dev.sunnat629.openai_android.apis.threads.ThreadRepository
 import dev.sunnat629.openai_android.apis.threads.ThreadRepositoryImpl
+import dev.sunnat629.openai_android.clients.chats.Chat
+import dev.sunnat629.openai_android.clients.chats.ChatImpl
 import dev.sunnat629.openai_android.models.openaAI.OpenAIBuilderConfig
 import dev.sunnat629.openai_android.networks.openAiHttpClient
 import io.ktor.client.HttpClient
@@ -42,6 +44,7 @@ fun openAiAndroidLibModuleKoin(configModel: OpenAIBuilderConfig) {
         modules(
             listOf(
                 openAIModule,
+                useCaseModule,
                 openAiAndroidLibModule(configModel),
             )
         )
@@ -50,6 +53,11 @@ fun openAiAndroidLibModuleKoin(configModel: OpenAIBuilderConfig) {
 
 val openAIModule = module {
     single<OpenAI> { OpenAIImpl(get()) }
+}
+
+
+val useCaseModule = module {
+    factory<Chat> { ChatImpl(get()) }
 }
 
 fun openAiAndroidLibModule(configModel: OpenAIBuilderConfig) = module {

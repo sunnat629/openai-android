@@ -57,6 +57,8 @@ dependencies {
     // Koin core features for Android
     implementation("io.insert-koin:koin-core")
     implementation("io.insert-koin:koin-core-coroutines")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
