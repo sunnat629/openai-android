@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "dev.sunnat629.openai_client.test.app-mergeDebugAndroidTestResources-32:/values-sk/values-sk.xml",
+            "outputFile": "dev.sunnat629.openai_client.test.sample-mergeDebugAndroidTestResources-32:/values-sk/values-sk.xml",
             "map": [
                 {
                     "source": "/Users/admin/.gradle/caches/transforms-3/0ac67a8dd223f3149cf277545cdd511e/transformed/core-1.12.0/res/values-sk/values-sk.xml",
