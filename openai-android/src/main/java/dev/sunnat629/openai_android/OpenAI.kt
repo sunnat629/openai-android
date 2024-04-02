@@ -8,6 +8,7 @@ package dev.sunnat629.openai_android
 
 import dev.sunnat629.openai_android.apis.chats.ChatRepository
 import dev.sunnat629.openai_android.apis.models.ModelsRepository
+import dev.sunnat629.openai_android.clients.chats.Chat
 import dev.sunnat629.openai_android.models.chats.ChatRequest
 import dev.sunnat629.openai_android.models.chats.ChatResponse
 import dev.sunnat629.openai_android.models.models.ListModelsResponse
@@ -22,13 +23,15 @@ interface OpenAI {
     suspend fun modelList(): ApiResult<ListModelsResponse>
     suspend fun retrieveModel(id: String): ApiResult<ModelResponse>
 
+    val chat: Chat
 
-    suspend fun chat(request: ChatRequest): ApiResult<ChatResponse>
+
 }
 
 internal class OpenAIImpl(configModel: OpenAIBuilderConfig) : OpenAI, KoinComponent {
     private val modelsRepository: ModelsRepository by inject()
-    private val chatRepository: ChatRepository by inject()
+    private val _chat: Chat by inject()
+    override val chat: Chat get() = _chat
 
     init {
         openAiAndroidLibModuleKoin(configModel)
@@ -40,9 +43,5 @@ internal class OpenAIImpl(configModel: OpenAIBuilderConfig) : OpenAI, KoinCompon
 
     override suspend fun retrieveModel(id: String): ApiResult<ModelResponse> {
         return modelsRepository.retrieveModel(id)
-    }
-
-    override suspend fun chat(request: ChatRequest): ApiResult<ChatResponse> {
-        return chatRepository.chat(request)
     }
 }
