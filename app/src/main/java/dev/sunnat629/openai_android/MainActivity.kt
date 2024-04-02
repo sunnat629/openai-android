@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -23,9 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import dev.sunnat629.openai_android.models.chats.ChatContent
 import dev.sunnat629.openai_android.models.chats.ChatRequest
 import dev.sunnat629.openai_android.models.chats.ChatContent
-import dev.sunnat629.openai_android.models.chats.ChatMessage
 import dev.sunnat629.openai_android.models.chats.ChatRequest
-import dev.sunnat629.openai_android.models.chats.TextContent
 import dev.sunnat629.openai_android.networks.onFailure
 import dev.sunnat629.openai_android.networks.onSuccess
 import dev.sunnat629.openai_android.ui.theme.OpenAiAndroidTheme
@@ -50,34 +49,15 @@ class MainActivity : ComponentActivity() {
 
                     LaunchedEffect(Unit) {
                         lifecycleScope.launch {
-                            openAI.retrieveModel("dall-e-2")
+                            openAI.chat
+                                .model("gpt-3.5-turbo")
+                                .role("user")
+                                .text("What's the name of the capital of Bangladesh?")
+                                .create()
                                 .onSuccess {
-                                    model.value = "Success: ${it.id}"
-                                    Log.d("ASDF", it.toString())
-                                }
-                                .onFailure {
-                                    model.value = "Failure: ${it.message}"
-                                    Log.e("ASDF", it.toString())
-                                }
-                        }
-                    }
-
-
-                    LaunchedEffect(Unit) {
-                        lifecycleScope.launch {
-                            openAI.chat(
-                                ChatRequest(
-                                    model = "gpt-3.5-turbo",
-                                    messages = listOf(
-                                        ChatContent.createTextMessage(
-                                            role = "user",
-                                            content = "Tell me something yourself",
-                                        )
-                                    ),
-                                )
-                            )
-                                .onSuccess {
-                                    chat.value = "${it.choices[0].message.role}: ${it.choices[0].message.content}"
+                                    model.value = it.model
+                                    chat.value =
+                                        "${it.choices.first().message.role}: ${it.choices.first().message.content}"
                                     Log.d("ASDF", it.toString())
                                 }
                                 .onFailure {
@@ -124,6 +104,8 @@ class MainActivity : ComponentActivity() {
                         Text(
                             text = "user: What's the name of the capital of Bangladesh?",
                         )
+
+                        Spacer(modifier = Modifier.height(10.dp))
 
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
