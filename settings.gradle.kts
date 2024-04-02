@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "OpenAi-Android"
-include(":app")
+include(":sample")
 include(":openai-android")

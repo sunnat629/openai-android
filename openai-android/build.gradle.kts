@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.sunnat629.openai_android"
+    namespace = "dev.sunnat629.openai_client"
     compileSdk = 34
 
     defaultConfig {
