@@ -6,7 +6,6 @@
 
 package dev.sunnat629.openai_client.models.chats
 
-import dev.sunnat629.openai_client.clients.chats.AAA
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement

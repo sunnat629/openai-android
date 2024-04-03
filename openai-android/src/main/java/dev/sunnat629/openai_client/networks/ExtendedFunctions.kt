@@ -10,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
@@ -30,6 +31,12 @@ suspend inline fun <reified T> HttpClient.patchRequest(
     request: Any,
     contentType: ContentType = ContentType.Application.Json,
 ): ApiResult<T> = makeRequest(HttpMethod.Post, url, body = request, contentType = contentType)
+
+suspend inline fun <reified T> HttpClient.postRequestT(
+    url: String,
+    request: Any,
+    contentType: ContentType = ContentType.Application.Json,
+): T = makeRequestT(HttpMethod.Post, url, body = request, contentType = contentType)
 
 suspend inline fun <reified T> HttpClient.postRequest(
     url: String,
@@ -73,3 +80,24 @@ suspend inline fun <reified T> HttpClient.makeRequest(
     ApiResult.Failure(e)
 }
 
+
+suspend inline fun <reified T> HttpClient.makeRequestT(
+    method: HttpMethod,
+    url: String,
+    contentType: ContentType,
+    body: Any? = null // Optional, used for POST, PUT, DELETE
+): T = withContext(Dispatchers.IO) {
+    val response: HttpResponse = request(url) {
+        this.method = method
+        contentType(contentType)
+        if (body != null) {
+            this.setBody(body)
+        }
+    }
+
+    if (response.status.isSuccess()) {
+        response.body()
+    } else {
+        throw RuntimeException("Received non-success status: ${response.status}")
+    }
+}

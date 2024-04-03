@@ -16,19 +16,20 @@ import dev.sunnat629.openai_client.models.chats.ChatResponse
 import dev.sunnat629.openai_client.models.chats.FunctionTool
 import dev.sunnat629.openai_client.models.chats.ImageContent
 import dev.sunnat629.openai_client.models.chats.TextContent
-import dev.sunnat629.openai_client.networks.ApiResult
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 interface Chat : BaseUseCases<Chat> {
 
-    suspend fun stream(enable: Boolean): Chat
+    suspend fun stream(enable: Boolean, delay: Long = 200L): Chat
     suspend fun logprobs(enable: Boolean, topLogprobs: Int): Chat
     suspend fun maxTokens(maxTokens: Int): Chat
     suspend fun toolChoice(toolChoice: String): Chat
     suspend fun tools(tools: List<FunctionTool>): Chat
 
-    suspend fun create(): ApiResult<ChatResponse>
-    suspend fun chatSteam(): Flow<ApiResult<ChatResponse>>
+    fun create(): Flow<ChatResponse>
 }
 
 internal class ChatImpl(private val repository: ChatRepository) : Chat {
@@ -38,6 +39,7 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
     private var _text: String? = null
     private var _imageUrl: String? = null
     private var _stream: Boolean? = null
+    private var _delay: Long = 200
     private var _logprobs: Boolean? = null
     private var _topLogprobs: Int? = null
     private var _maxTokens: Int? = null
@@ -64,8 +66,9 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
         return this
     }
 
-    override suspend fun stream(enable: Boolean): Chat {
+    override suspend fun stream(enable: Boolean, delay: Long): Chat {
         this._stream = enable
+        this._delay = delay
         return this
     }
 
@@ -90,61 +93,19 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
         return this
     }
 
-
-    override suspend fun chatSteam(): Flow<ApiResult<ChatResponse>> {
-        // Initialize an empty list for content
-        val contentList = mutableListOf<ChatContent>()
-
-        // Add ImageContent to the list if _imageUrl is not null or empty
-        if (!_imageUrl.isNullOrEmpty()) {
-            contentList.add(ImageContent(imageUrl = _imageUrl!!))
+    override fun create(): Flow<ChatResponse> {
+        val contentList = mutableListOf<ChatContent>().apply {
+            if (!_imageUrl.isNullOrEmpty()) {
+                add(ImageContent(imageUrl = _imageUrl!!))
+            }
+            if (!_text.isNullOrEmpty()) {
+                add(TextContent(text = _text!!))
+            }
         }
 
-        // Add TextContent to the list if _text is not null or empty
-        if (!_text.isNullOrEmpty()) {
-            contentList.add(TextContent(text = _text!!))
-        }
-
-        val request = ChatRequest(
-        model = _model!!,
-        messages = listOf(
-            ChatMessage(
-                role = _role!!,
-                content = contentList
-            )
-        ),
-        stream = _stream,
-        logprobs = _logprobs,
-        maxTokens = _maxTokens,
-        topLogprobs = _topLogprobs,
-        toolChoice = _toolChoice,
-        tools = _tools,
-    )
-        return repository.chatSteam(request)
-    }
-    override suspend fun create(): ApiResult<ChatResponse> {
-        // Initialize an empty list for content
-        val contentList = mutableListOf<ChatContent>()
-
-        // Add ImageContent to the list if _imageUrl is not null or empty
-        if (!_imageUrl.isNullOrEmpty()) {
-            contentList.add(ImageContent(imageUrl = _imageUrl!!))
-        }
-
-        // Add TextContent to the list if _text is not null or empty
-        if (!_text.isNullOrEmpty()) {
-            contentList.add(TextContent(text = _text!!))
-        }
-
-        // Create the ChatRequest object using the dynamically built content list
         val request = ChatRequest(
             model = _model!!,
-            messages = listOf(
-                ChatMessage(
-                    role = _role!!,
-                    content = contentList
-                )
-            ),
+            messages = listOf(ChatMessage(role = _role!!, content = contentList)),
             stream = _stream,
             logprobs = _logprobs,
             maxTokens = _maxTokens,
@@ -153,11 +114,9 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
             tools = _tools,
         )
 
-        val response = when {
-            _logprobs == true -> repository.chatLogprobs(request)
-            !_imageUrl.isNullOrEmpty() -> repository.chatImage(request)
-            else -> repository.chatText(request)
+        return when {
+            _stream == true -> repository.createChatSteam(request, _delay)
+            else -> flow { emit(repository.createChat(request)) }
         }
-        return response
     }
 }

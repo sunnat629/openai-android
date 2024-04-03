@@ -13,9 +13,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
 
-    suspend fun chatText(request: ChatRequest): ApiResult<ChatResponse>
-    suspend fun chatImage(request: ChatRequest): ApiResult<ChatResponse>
-    suspend fun chatSteam(request: ChatRequest): Flow<ApiResult<ChatResponse>>
-    suspend fun chatFunction(request: ChatRequest): ApiResult<ChatResponse>
-    suspend fun chatLogprobs(request: ChatRequest): ApiResult<ChatResponse>
+    suspend fun createChat(request: ChatRequest): ChatResponse
+    fun createChatSteam(request: ChatRequest, delay: Long): Flow<ChatResponse>
+    suspend fun createChatFunction(request: ChatRequest): ChatResponse
+    suspend fun createChatLogprobs(request: ChatRequest): ChatResponse
 }
