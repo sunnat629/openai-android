@@ -8,7 +8,6 @@ package dev.sunnat629.openai_client.apis.models
 
 import dev.sunnat629.openai_client.models.models.ListModelsResponse
 import dev.sunnat629.openai_client.models.models.ModelResponse
-import dev.sunnat629.openai_client.networks.ApiResult
 import dev.sunnat629.openai_client.networks.getRequest
 import io.ktor.client.HttpClient
 

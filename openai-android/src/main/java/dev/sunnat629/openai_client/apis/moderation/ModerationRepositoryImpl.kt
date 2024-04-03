@@ -6,7 +6,6 @@
 
 package dev.sunnat629.openai_client.apis.moderation
 
-import dev.sunnat629.openai_client.networks.ApiResult
 import dev.sunnat629.openai_client.networks.postRequest
 import io.ktor.client.HttpClient
 
