@@ -9,8 +9,12 @@ package dev.sunnat629.openai_client.apis.chats
 import dev.sunnat629.openai_client.models.chats.ChatRequest
 import dev.sunnat629.openai_client.models.chats.ChatResponse
 import dev.sunnat629.openai_client.networks.ApiResult
+import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
 
-    suspend fun chat(request: ChatRequest): ApiResult<ChatResponse>
+    suspend fun createChat(request: ChatRequest): ChatResponse
+    fun createChatSteam(request: ChatRequest, delay: Long): Flow<ChatResponse>
+    suspend fun createChatFunction(request: ChatRequest): ChatResponse
+    suspend fun createChatLogprobs(request: ChatRequest): ChatResponse
 }

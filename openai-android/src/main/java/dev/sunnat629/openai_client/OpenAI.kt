@@ -6,6 +6,7 @@
 
 package dev.sunnat629.openai_client
 
+import dev.sunnat629.openai_client.KoinModules.openAiAndroidLibModuleKoin
 import dev.sunnat629.openai_client.clients.chats.Chat
 import dev.sunnat629.openai_client.clients.models.Models
 import dev.sunnat629.openai_client.models.openaAI.OpenAIBuilderConfig

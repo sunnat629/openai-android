@@ -14,7 +14,7 @@ class ModerationsRepositoryImpl(private val httpClient: HttpClient) : Moderation
 
     private val baseUrl = "https://api.openai.com/v1/moderations"
 
-    override suspend fun createModeration(request: Any): ApiResult<Any> {
+    override suspend fun createModeration(request: Any): Any {
         return httpClient.postRequest(
             url = baseUrl,
             request = request

@@ -5,12 +5,14 @@ import dev.sunnat629.openai_client.clients.BaseUseCases
 import dev.sunnat629.openai_client.models.models.ListModelsResponse
 import dev.sunnat629.openai_client.models.models.ModelResponse
 import dev.sunnat629.openai_client.networks.ApiResult
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 
 interface Models : BaseUseCases<Models> {
 
-    suspend fun getModels(): ApiResult<ListModelsResponse>
-    suspend fun retrieveModel(): ApiResult<ModelResponse>
+    suspend fun getModels(): Flow<ListModelsResponse>
+    suspend fun retrieveModel(): Flow<ModelResponse>
 }
 
 
@@ -41,11 +43,11 @@ internal class ModelsImpl(private val repository: ModelsRepository) : Models {
         return this
     }
 
-    override suspend fun getModels(): ApiResult<ListModelsResponse> {
-        return repository.listModels()
+    override suspend fun getModels(): Flow<ListModelsResponse> {
+        return flow { emit(repository.listModels()) }
     }
 
-    override suspend fun retrieveModel(): ApiResult<ModelResponse> {
-        return repository.retrieveModel(_model!!)
+    override suspend fun retrieveModel(): Flow<ModelResponse> {
+        return flow { emit(repository.retrieveModel(_model!!)) }
     }
 }
