@@ -17,6 +17,17 @@ android {
 }
 ```
 
+### Add Token to your Android project
+
+- In your root Android project, add a `local.properties` or any `*.properties` file.
+- Add your github properties to the file
+
+```properties
+OPEN_AI_TOKEN =<Open Token API Key>
+```
+> [!WARNING] 
+> Make sure you add the file to your .gitignore to not add your credentials to git history!
+
 ### Access `local.properties` in Your Build Script
 
 Ensure your `local.properties` file contains the `OPEN_AI_TOKEN` and read it into your build configuration:
@@ -50,6 +61,9 @@ Access the securely stored token via the generated `BuildConfig` class:
 val token = BuildConfig.OPEN_AI_TOKEN
 ```
 
+> [!WARNING] 
+> Ensure to use environment variables for the API key, adhering to OpenAI's best practices for key security.
+[Read more on key safety](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
 
 ## OpenAI Client Initialization
 
@@ -94,7 +108,7 @@ class MainActivity: AppCompatActivity() {
 ## Dependency Injection with Koin
 Create a Koin module that provides an instance of the OpenAI client. This module will include the initialization logic for the OpenAI client, utilizing the BuildConfig.OPEN_AI_TOKEN for secure API token access.
 
-```kotin
+```kotlin
 val openAiModule = module {
     single {
          OpenAIBuilder(token = BuildConfig.OPEN_AI_TOKEN)
@@ -121,8 +135,6 @@ class MyActivity : AppCompatActivity() {
 
     // Use the injected client
 }
-
-
 ```
 
 Following this guide ensures your OpenAI client is correctly initialized, with a strong emphasis on security and modern Android development practices.

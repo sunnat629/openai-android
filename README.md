@@ -54,11 +54,6 @@ Explore detailed wiki on how to effectively use the OpenAI API client for Androi
 - [Runs](wiki/Runs.md)
 - [Threads](wiki/Threads.md)
 
-
-> [!WARNING] 
-> Ensure to use environment variables for the API key, adhering to OpenAI's best practices for key security.
-[Read more on key safety](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety).
-
 ## ℹ️ Sample Apps
 
 Check out `sample` directory for Android example apps. Instructions on how to run them are in the [README](sample/README.md).
