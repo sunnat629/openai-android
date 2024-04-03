@@ -71,6 +71,7 @@ class MainActivity : ComponentActivity() {
                             .model("gpt-3.5-turbo")
                             .role("user")
                             .text("What's the name of the capital of Bangladesh?")
+                            .stream(true)
                             .create()
                             .onSuccess {
                                 model.value = it.model
