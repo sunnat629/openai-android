@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,16 +18,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
-import dev.sunnat629.openai_client.networks.onFailure
-import dev.sunnat629.openai_client.networks.onSuccess
 import dev.sunnat629.openai_client.ui.theme.OpenAiAndroidTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
@@ -55,7 +49,6 @@ class MainActivity : ComponentActivity() {
                         return@LaunchedEffect
                         lifecycleScope.launch {
                             openAI.models
-                                .model("gpt-3.5-turbo")
                                 .role("user")
                                 .text("What's the name of the capital of Bangladesh?")
                                 .getModels()
@@ -72,6 +65,28 @@ class MainActivity : ComponentActivity() {
                                     loading.value = false
                                     modelMain.value = it.data.first().id
                                     Log.d("ASDF", it.toString())
+                                }
+                        }
+                    }
+
+                    LaunchedEffect(Unit) {
+                        return@LaunchedEffect
+                        lifecycleScope.launch {
+                            openAI.models
+                                .model("gpt-3.5-turbo")
+                                .role("user")
+                                .text("What's the name of the capital of Bangladesh?")
+                                .retrieveModel()
+                                .onStart {
+                                    loading.value = true
+                                }
+                                .catch {
+                                    loading.value = false
+                                    modelMain.value = "Failure: ${it.message}"
+                                }
+                                .collect {
+                                    loading.value = false
+                                    modelMain.value = it.objectContent
                                 }
                         }
                     }

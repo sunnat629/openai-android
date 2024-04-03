@@ -8,7 +8,6 @@ package dev.sunnat629.openai_client.apis.chats
 
 import dev.sunnat629.openai_client.models.chats.ChatRequest
 import dev.sunnat629.openai_client.models.chats.ChatResponse
-import dev.sunnat629.openai_client.networks.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {

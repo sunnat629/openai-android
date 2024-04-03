@@ -4,17 +4,30 @@ import dev.sunnat629.openai_client.apis.models.ModelsRepository
 import dev.sunnat629.openai_client.clients.BaseUseCases
 import dev.sunnat629.openai_client.models.models.ListModelsResponse
 import dev.sunnat629.openai_client.models.models.ModelResponse
-import dev.sunnat629.openai_client.networks.ApiResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-
+/**
+ * An interface extending BaseUseCases for model-specific operations.
+ * Allows for setting up model parameters and provides methods to retrieve models
+ * or specific model details.
+ */
 interface Models : BaseUseCases<Models> {
 
+    /**
+     * Retrieves a list of models available.
+     *
+     * @return A Flow emitting the list of models response over time.
+     */
     suspend fun getModels(): Flow<ListModelsResponse>
+
+    /**
+     * Retrieves details of a specific model based on previously set parameters.
+     *
+     * @return A Flow emitting the model's details response over time.
+     */
     suspend fun retrieveModel(): Flow<ModelResponse>
 }
-
 
 internal class ModelsImpl(private val repository: ModelsRepository) : Models {
 
