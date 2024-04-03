@@ -52,20 +52,25 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     LaunchedEffect(Unit) {
-                        return@LaunchedEffect
                         lifecycleScope.launch {
                             openAI.models
                                 .model("gpt-3.5-turbo")
                                 .role("user")
                                 .text("What's the name of the capital of Bangladesh?")
                                 .getModels()
-                                .onSuccess {
-                                    modelMain.value = it.data.first().id
-                                    Log.d("ASDF", it.toString())
-                                }
-                                .onFailure {
+                                .onStart {
+                                Log.w("ASDF", "onStart")
+                                loading.value = true
+                            }
+                                .catch {
+                                    loading.value = false
                                     modelMain.value = "Failure: ${it.message}"
                                     Log.e("ASDF", it.toString())
+                                }
+                                .collect {
+                                    loading.value = false
+                                    modelMain.value = it.data.first().id
+                                    Log.d("ASDF", it.toString())
                                 }
                         }
                     }
@@ -103,6 +108,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 LaunchedEffect(Unit) {
+                    return@LaunchedEffect
                     lifecycleScope.launch {
                         openAI.chat
                             .model("gpt-3.5-turbo")

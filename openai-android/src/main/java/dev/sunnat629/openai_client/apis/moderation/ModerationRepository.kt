@@ -6,8 +6,6 @@
 
 package dev.sunnat629.openai_client.apis.moderation
 
-import dev.sunnat629.openai_client.networks.ApiResult
-
 interface ModerationsRepository {
-    suspend fun createModeration(request: Any): ApiResult<Any>
+    suspend fun createModeration(request: Any): Any
 }

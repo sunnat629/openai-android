@@ -15,15 +15,11 @@ import io.ktor.client.HttpClient
 class ModelsRepositoryImpl(private val httpClient: HttpClient) : ModelsRepository {
     private val baseUrl = "https://api.openai.com/v1/models"
 
-    override suspend fun listModels(): ApiResult<ListModelsResponse> {
-        return httpClient.getRequest(
-            url = baseUrl
-        )
+    override suspend fun listModels(): ListModelsResponse {
+        return httpClient.getRequest(url = baseUrl)
     }
 
-    override suspend fun retrieveModel(modelId: String): ApiResult<ModelResponse> {
-        return httpClient.getRequest(
-            url = "$baseUrl/$modelId"
-        )
+    override suspend fun retrieveModel(modelId: String): ModelResponse {
+        return httpClient.getRequest(url = "$baseUrl/$modelId")
     }
 }

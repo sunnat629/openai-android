@@ -12,6 +12,6 @@ import dev.sunnat629.openai_client.networks.ApiResult
 
 interface ModelsRepository {
 
-    suspend fun listModels(): ApiResult<ListModelsResponse>
-    suspend fun retrieveModel(modelId: String): ApiResult<ModelResponse>
+    suspend fun listModels(): ListModelsResponse
+    suspend fun retrieveModel(modelId: String): ModelResponse
 }
