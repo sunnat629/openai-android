@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.flowOf
 interface Chat : BaseUseCases<Chat> {
 
     suspend fun stream(enable: Boolean, delay: Long = 200L): Chat
-    suspend fun logprobs(enable: Boolean, topLogprobs: Int): Chat
+    suspend fun logprobs(enable: Boolean, topLogprobs: Int = 2): Chat
     suspend fun maxTokens(maxTokens: Int): Chat
     suspend fun toolChoice(toolChoice: String): Chat
     suspend fun tools(tools: List<FunctionTool>): Chat
@@ -41,7 +41,7 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
     private var _stream: Boolean? = null
     private var _delay: Long = 200
     private var _logprobs: Boolean? = null
-    private var _topLogprobs: Int? = null
+    private var _topLogprobs: Int = 2
     private var _maxTokens: Int? = null
     private var _toolChoice: String? = null
     private var _tools: List<FunctionTool>? = null

@@ -52,6 +52,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     LaunchedEffect(Unit) {
+                        return@LaunchedEffect
                         lifecycleScope.launch {
                             openAI.models
                                 .model("gpt-3.5-turbo")
@@ -59,9 +60,9 @@ class MainActivity : ComponentActivity() {
                                 .text("What's the name of the capital of Bangladesh?")
                                 .getModels()
                                 .onStart {
-                                Log.w("ASDF", "onStart")
-                                loading.value = true
-                            }
+                                    Log.w("ASDF", "onStart")
+                                    loading.value = true
+                                }
                                 .catch {
                                     loading.value = false
                                     modelMain.value = "Failure: ${it.message}"
@@ -74,90 +75,113 @@ class MainActivity : ComponentActivity() {
                                 }
                         }
                     }
-                }
 
-
-                LaunchedEffect(Unit) {
-                    return@LaunchedEffect
-                    lifecycleScope.launch {
-                        openAI.chat
-                            .model("gpt-3.5-turbo")
-                            .role("user")
-                            .text("What's the name of the capital of Bangladesh?")
-                            .stream(true)
-                            .create()
-                            .onStart {
-                                Log.w("ASDF", "onStart")
-                                loading.value = true
-                            }
-                            .catch { exception ->
-                                Log.w("ASDF", "catch")
-                                loading.value = false
-                                chat.value = "Failure: ${exception.message}"
-                            }
-                            .collect { chatResponse ->
-                                Log.w("ASDF", "collect")
-                                loading.value = false
-                                model.value = chatResponse.model.toString()
-                                chatResponse.choices?.firstOrNull()?.delta?.content?.takeIf { true }
-                                    ?.let { content ->
-                                        chat.value += content
-                                    }
-                            }
+                    LaunchedEffect(Unit) {
+                        return@LaunchedEffect
+                        lifecycleScope.launch {
+                            openAI.chat
+                                .model("gpt-3.5-turbo")
+                                .role("user")
+                                .text("What's the name of the capital of Bangladesh?")
+                                .stream(true)
+                                .create()
+                                .onStart {
+                                    Log.w("ASDF", "onStart")
+                                    loading.value = true
+                                }
+                                .catch { exception ->
+                                    Log.w("ASDF", "catch")
+                                    loading.value = false
+                                    chat.value = "Failure: ${exception.message}"
+                                }
+                                .collect { chatResponse ->
+                                    Log.w("ASDF", "collect")
+                                    loading.value = false
+                                    model.value = chatResponse.model.toString()
+                                    chatResponse.choices?.firstOrNull()?.delta?.content?.takeIf { true }
+                                        ?.let { content ->
+                                            chat.value += content
+                                        }
+                                }
+                        }
                     }
-                }
 
-                LaunchedEffect(Unit) {
-                    return@LaunchedEffect
-                    lifecycleScope.launch {
-                        openAI.chat
-                            .model("gpt-3.5-turbo")
-                            .role("user")
-                            .text("What's the name of the capital of Bangladesh?")
-                            .create()
-                            .onStart {
-                                loading.value = true
-                            }
-                            .catch { exception ->
-                                loading.value = false
-                                chat.value = "Failure: ${exception.message}"
-                            }
-                            .collect { chatResponse ->
-                                loading.value = false
-                                model.value = chatResponse.model.toString()
-                                chat.value =
-                                    "${chatResponse.choices?.firstOrNull()?.message?.role}: ${chatResponse.choices?.firstOrNull()?.message?.content}"
-                            }
+                    LaunchedEffect(Unit) {
+                        return@LaunchedEffect
+                        lifecycleScope.launch {
+                            openAI.chat
+                                .model("gpt-3.5-turbo")
+                                .role("user")
+                                .text("What's the name of the capital of Bangladesh?")
+                                .create()
+                                .onStart {
+                                    loading.value = true
+                                }
+                                .catch { exception ->
+                                    loading.value = false
+                                    chat.value = "Failure: ${exception.message}"
+                                }
+                                .collect { chatResponse ->
+                                    loading.value = false
+                                    model.value = chatResponse.model.toString()
+                                    chat.value =
+                                        "${chatResponse.choices?.firstOrNull()?.message?.role}: ${chatResponse.choices?.firstOrNull()?.message?.content}"
+                                }
+                        }
                     }
-                }
 
-                if (loading.value) CircularProgressIndicator()
-                else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.White)
-                            .padding(10.dp)
-                    ) {
-                        Text(
-                            text = "modelMain: ${modelMain.value}",
-                        )
+                    LaunchedEffect(Unit) {
+                        return@LaunchedEffect
+                        lifecycleScope.launch {
+                            openAI.chat
+                                .model("gpt-3.5-turbo")
+                                .role("user")
+                                .text("What's the name of the capital of Bangladesh?")
+                                .logprobs(true, 2)
+                                .create()
+                                .onStart {
+                                    loading.value = true
+                                }
+                                .catch { exception ->
+                                    loading.value = false
+                                    chat.value = "Failure: ${exception.message}"
+                                }
+                                .collect { chatResponse ->
+                                    loading.value = false
+                                    model.value = chatResponse.model.toString()
+                                    chat.value =
+                                        "${chatResponse.choices?.firstOrNull()?.message?.role}: ${chatResponse.choices?.firstOrNull()?.message?.content}"
+                                }
+                        }
+                    }
 
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = "model: ${model.value}",
-                        )
+                    if (loading.value) CircularProgressIndicator()
+                    else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(10.dp)
+                        ) {
+                            Text(
+                                text = "modelMain: ${modelMain.value}",
+                            )
 
-                        Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = "model: ${model.value}",
+                            )
 
-                        Text(
-                            text = "user: What's the name of the capital of Bangladesh?",
-                        )
+                            Spacer(modifier = Modifier.height(10.dp))
 
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = chat.value,
-                        )
+                            Text(
+                                text = "user: What's the name of the capital of Bangladesh?",
+                            )
+
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = chat.value,
+                            )
+                        }
                     }
                 }
             }
