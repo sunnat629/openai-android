@@ -35,49 +35,67 @@ import dev.sunnat629.openai_client.clients.models.ModelsImpl
 import dev.sunnat629.openai_client.models.openaAI.OpenAIBuilderConfig
 import dev.sunnat629.openai_client.networks.ktorHttpClient
 import io.ktor.client.HttpClient
+import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-fun openAiAndroidLibModuleKoin(configModel: OpenAIBuilderConfig) {
-    // This starts Koin for your library. You might call this from your library's initialization logic,
-    // or provide it for the host app to call at an appropriate time.
-    startKoin {
-        // App declares its own modules, plus the library's modules
-        modules(
-            listOf(
-                openAIModule,
-                useCaseModule,
-                repositoryModule,
-                ktorHttpClientModule(configModel),
+object KoinModules {
+    private var isKoinInitialized = false
+    fun openAiAndroidLibModuleKoin(configModel: OpenAIBuilderConfig) {
+        // This starts Koin for your library. You might call this from your library's initialization logic,
+        // or provide it for the host app to call at an appropriate time.
+
+        if (isKoinInitialized) return
+        startKoin {
+            // App declares its own modules, plus the library's modules
+            modules(
+                listOf(
+                    openAIModule,
+                    useCaseModule,
+                    repositoryModule,
+                    jsonModule,
+                    ktorHttpClientModule(configModel),
+                )
             )
-        )
+        }
+        isKoinInitialized = true
     }
-}
 
-fun ktorHttpClientModule(configModel: OpenAIBuilderConfig) = module {
-    single<HttpClient> { ktorHttpClient(configModel) }
-}
+    private fun ktorHttpClientModule(configModel: OpenAIBuilderConfig) = module {
+        single<HttpClient> { ktorHttpClient(configModel, get()) }
+    }
 
-val openAIModule = module {
-    single<OpenAI> { OpenAIImpl(get()) }
-}
+    private val jsonModule = module {
+        single {
+            Json {
+                isLenient = true
+                ignoreUnknownKeys = true
+            }
+        }
+    }
 
-val useCaseModule = module {
-    factory<Chat> { ChatImpl(get()) }
-    factory<Models> { ModelsImpl(get()) }
-}
 
-val repositoryModule = module {
+    private val openAIModule = module {
+        single<OpenAI> { OpenAIImpl(get()) }
+    }
 
-    single<AudioRepository> { AudioRepositoryImpl(get()) }
-    single<ChatRepository> { ChatRepositoryImpl(get()) }
-    single<EmbeddingsRepository> { EmbeddingsRepositoryImpl(get()) }
-    single<FineTuningRepository> { FineTuningRepositoryImpl(get()) }
-    single<FilesRepository> { FilesRepositoryImpl(get()) }
-    single<ImageRepository> { ImageRepositoryImpl(get()) }
-    single<ModelsRepository> { ModelsRepositoryImpl(get()) }
-    single<ModerationsRepository> { ModerationsRepositoryImpl(get()) }
-    single<AssistantRepository> { AssistantRepositoryImpl(get()) }
-    single<ThreadRepository> { ThreadRepositoryImpl(get()) }
-    single<MessageRepository> { MessageRepositoryImpl(get()) }
+    private val useCaseModule = module {
+        factory<Chat> { ChatImpl(get()) }
+        factory<Models> { ModelsImpl(get()) }
+    }
+
+    private val repositoryModule = module {
+
+        single<AudioRepository> { AudioRepositoryImpl(get()) }
+        single<ChatRepository> { ChatRepositoryImpl(get()) }
+        single<EmbeddingsRepository> { EmbeddingsRepositoryImpl(get()) }
+        single<FineTuningRepository> { FineTuningRepositoryImpl(get()) }
+        single<FilesRepository> { FilesRepositoryImpl(get()) }
+        single<ImageRepository> { ImageRepositoryImpl(get()) }
+        single<ModelsRepository> { ModelsRepositoryImpl(get()) }
+        single<ModerationsRepository> { ModerationsRepositoryImpl(get()) }
+        single<AssistantRepository> { AssistantRepositoryImpl(get()) }
+        single<ThreadRepository> { ThreadRepositoryImpl(get()) }
+        single<MessageRepository> { MessageRepositoryImpl(get()) }
+    }
 }

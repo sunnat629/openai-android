@@ -25,6 +25,8 @@ import androidx.lifecycle.lifecycleScope
 import dev.sunnat629.openai_client.networks.onFailure
 import dev.sunnat629.openai_client.networks.onSuccess
 import dev.sunnat629.openai_client.ui.theme.OpenAiAndroidTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -46,21 +48,21 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     LaunchedEffect(Unit) {
-                        lifecycleScope.launch {
-                            openAI.models
-                                .model("gpt-3.5-turbo")
-                                .role("user")
-                                .text("What's the name of the capital of Bangladesh?")
-                                .getModels()
-                                .onSuccess {
-                                    modelMain.value = it.data.first().id
-                                    Log.d("ASDF", it.toString())
-                                }
-                                .onFailure {
-                                    modelMain.value = "Failure: ${it.message}"
-                                    Log.e("ASDF", it.toString())
-                                }
-                        }
+//                        lifecycleScope.launch {
+//                            openAI.models
+//                                .model("gpt-3.5-turbo")
+//                                .role("user")
+//                                .text("What's the name of the capital of Bangladesh?")
+//                                .getModels()
+//                                .onSuccess {
+//                                    modelMain.value = it.data.first().id
+//                                    Log.d("ASDF", it.toString())
+//                                }
+//                                .onFailure {
+//                                    modelMain.value = "Failure: ${it.message}"
+//                                    Log.e("ASDF", it.toString())
+//                                }
+//                        }
                     }
                 }
 
@@ -72,16 +74,25 @@ class MainActivity : ComponentActivity() {
                             .role("user")
                             .text("What's the name of the capital of Bangladesh?")
                             .stream(true)
-                            .create()
-                            .onSuccess {
-                                model.value = it.model
-                                chat.value =
-                                    "${it.choices.first().message.role}: ${it.choices.first().message.content}"
-                                Log.d("ASDF", it.toString())
-                            }
-                            .onFailure {
-                                chat.value = "Failure: ${it.message}"
-                                Log.e("ASDF", it.toString())
+                            .chatSteam()
+                            .collect {
+                                it.onSuccess { chatResponse ->
+                                    model.value = chatResponse.model.toString()
+                                    lifecycleScope.launch {
+                                        chatResponse.choices?.firstOrNull()?.delta?.content?.takeIf { true }
+                                            ?.let { content ->
+                                                delay(1000)
+                                                chat.value += content
+                                                Log.e("ASDF", content) }
+
+
+
+                                    }
+                                }
+                                    .onFailure { error ->
+                                        chat.value = "Failure: ${error.message}"
+                                        Log.e("ASDF", error.toString())
+                                    }
                             }
                     }
                 }

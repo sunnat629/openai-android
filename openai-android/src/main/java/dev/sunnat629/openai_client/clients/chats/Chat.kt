@@ -6,6 +6,7 @@
 
 package dev.sunnat629.openai_client.clients.chats
 
+import android.util.Log
 import dev.sunnat629.openai_client.apis.chats.ChatRepository
 import dev.sunnat629.openai_client.clients.BaseUseCases
 import dev.sunnat629.openai_client.models.chats.ChatContent
@@ -16,6 +17,7 @@ import dev.sunnat629.openai_client.models.chats.FunctionTool
 import dev.sunnat629.openai_client.models.chats.ImageContent
 import dev.sunnat629.openai_client.models.chats.TextContent
 import dev.sunnat629.openai_client.networks.ApiResult
+import kotlinx.coroutines.flow.Flow
 
 interface Chat : BaseUseCases<Chat> {
 
@@ -26,6 +28,7 @@ interface Chat : BaseUseCases<Chat> {
     suspend fun tools(tools: List<FunctionTool>): Chat
 
     suspend fun create(): ApiResult<ChatResponse>
+    suspend fun chatSteam(): Flow<ApiResult<ChatResponse>>
 }
 
 internal class ChatImpl(private val repository: ChatRepository) : Chat {
@@ -87,6 +90,38 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
         return this
     }
 
+
+    override suspend fun chatSteam(): Flow<ApiResult<ChatResponse>> {
+        // Initialize an empty list for content
+        val contentList = mutableListOf<ChatContent>()
+
+        // Add ImageContent to the list if _imageUrl is not null or empty
+        if (!_imageUrl.isNullOrEmpty()) {
+            contentList.add(ImageContent(imageUrl = _imageUrl!!))
+        }
+
+        // Add TextContent to the list if _text is not null or empty
+        if (!_text.isNullOrEmpty()) {
+            contentList.add(TextContent(text = _text!!))
+        }
+
+        val request = ChatRequest(
+        model = _model!!,
+        messages = listOf(
+            ChatMessage(
+                role = _role!!,
+                content = contentList
+            )
+        ),
+        stream = _stream,
+        logprobs = _logprobs,
+        maxTokens = _maxTokens,
+        topLogprobs = _topLogprobs,
+        toolChoice = _toolChoice,
+        tools = _tools,
+    )
+        return repository.chatSteam(request)
+    }
     override suspend fun create(): ApiResult<ChatResponse> {
         // Initialize an empty list for content
         val contentList = mutableListOf<ChatContent>()
@@ -118,7 +153,11 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
             tools = _tools,
         )
 
-        // Pass the request to the repository
-        return repository.chat(request)
+        val response = when {
+            _logprobs == true -> repository.chatLogprobs(request)
+            !_imageUrl.isNullOrEmpty() -> repository.chatImage(request)
+            else -> repository.chatText(request)
+        }
+        return response
     }
 }
