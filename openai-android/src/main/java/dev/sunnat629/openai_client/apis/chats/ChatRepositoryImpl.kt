@@ -9,7 +9,7 @@ package dev.sunnat629.openai_client.apis.chats
 import android.util.Log
 import dev.sunnat629.openai_client.models.chats.ChatRequest
 import dev.sunnat629.openai_client.models.chats.ChatResponse
-import dev.sunnat629.openai_client.networks.postRequestT
+import dev.sunnat629.openai_client.networks.postRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.accept
@@ -33,7 +33,7 @@ class ChatRepositoryImpl(private val client: HttpClient) : ChatRepository {
     private val baseUrl = "https://api.openai.com/v1/chat/completions"
 
     override suspend fun createChat(request: ChatRequest): ChatResponse {
-        return client.postRequestT<ChatResponse>(baseUrl, request)
+        return client.postRequest<ChatResponse>(baseUrl, request)
     }
 
     private val jsonLenient = Json {
@@ -83,10 +83,10 @@ class ChatRepositoryImpl(private val client: HttpClient) : ChatRepository {
     }
 
     override suspend fun createChatFunction(request: ChatRequest): ChatResponse {
-        return client.postRequestT(baseUrl, request)
+        return client.postRequest(baseUrl, request)
     }
 
     override suspend fun createChatLogprobs(request: ChatRequest): ChatResponse {
-        return client.postRequestT(baseUrl, request)
+        return client.postRequest(baseUrl, request)
     }
 }

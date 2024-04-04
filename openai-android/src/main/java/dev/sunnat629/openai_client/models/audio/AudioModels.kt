@@ -20,11 +20,11 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CreateSpeechRequest(
-    @SerialName("model") val model: String,
-    @SerialName("input") val input: String,
-    @SerialName("voice") val voice: String,
+    @SerialName("model") val model: String? = null,
+    @SerialName("input") val input: String? = null,
+    @SerialName("voice") val voice: String? = null,
     @SerialName("response_format") val responseFormat: String? = null,
-    @SerialName("speed") val speed: Double? = null
+    @SerialName("speed") val speed: Double? = null,
 )
 
 /**
@@ -35,7 +35,7 @@ data class CreateSpeechRequest(
  */
 @Serializable
 data class CreateSpeechResponse(
-    @SerialName("audio_url") val audioUrl: String
+    @SerialName("audio_url") val audioUrl: String? = null,
 )
 
 /**
@@ -47,8 +47,8 @@ data class CreateSpeechResponse(
  */
 @Serializable
 data class CreateTranscriptionRequest(
-    @SerialName("file") val file: String, // Placeholder for binary data
-    @SerialName("model") val model: String,
+    @SerialName("file") val file: String? = null,
+    @SerialName("model") val model: String? = null,
     @SerialName("language") val language: String? = null
 )
 
@@ -59,7 +59,7 @@ data class CreateTranscriptionRequest(
  */
 @Serializable
 data class CreateTranscriptionResponse(
-    @SerialName("text") val text: String
+    @SerialName("text") val text: String? = null,
 )
 
 /**
@@ -70,7 +70,7 @@ data class CreateTranscriptionResponse(
  */
 @Serializable
 data class CreateTranslationRequest(
-    @SerialName("file") val file: String, // Placeholder for binary data
+    @SerialName("file") val file: String? = null,
     @SerialName("model") val model: String
 )
 
@@ -81,7 +81,7 @@ data class CreateTranslationRequest(
  */
 @Serializable
 data class CreateTranslationResponse(
-    @SerialName("text") val text: String
+    @SerialName("text") val text: String? = null,
 )
 
 enum class TTSModel(val value: String) {

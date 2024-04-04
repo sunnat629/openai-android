@@ -6,6 +6,8 @@
 
 package dev.sunnat629.openai_client.clients
 
+import android.content.Context
+import android.net.Uri
 import dev.sunnat629.openai_client.apis.audio.AudioRepository
 import dev.sunnat629.openai_client.apis.audio.AudioRepositoryImpl
 import dev.sunnat629.openai_client.models.audio.CreateSpeechRequest
@@ -19,6 +21,12 @@ import dev.sunnat629.openai_client.models.audio.TTSModel
 import dev.sunnat629.openai_client.models.audio.TimestampGranularity
 import dev.sunnat629.openai_client.models.audio.Voice
 import dev.sunnat629.openai_client.networks.ApiResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
+import java.io.File
 
 interface Audio {
 
@@ -95,60 +103,90 @@ interface Audio {
     fun temperature(temperature: Double): Audio
 
 
-
-    suspend fun speech(request: CreateSpeechRequest): CreateSpeechResponse
+    suspend fun speech(): Flow<ByteArray>
+    suspend fun speechWithFile(context: Context): Flow<Uri>
     suspend fun transcription(request: CreateTranscriptionRequest): CreateTranscriptionResponse
     suspend fun translation(request: CreateTranslationRequest): CreateTranslationResponse
 }
 
-class AudioImpl(private val repositoryImpl: AudioRepository): Audio {
+class AudioImpl(private val repository: AudioRepository) : Audio {
 
-    private var _model: String? = null
+    private var _model: TTSModel? = null
     private var _input: String? = null
-    private var _voice: String? = null
+    private var _voice: Voice? = null
     private var _file: String? = null
-    private var _responseFormat: String? = null
-    private var _timestampGranularities: String? = null
-    private var _speed: Double = 1.0
+    private var _prompt: String? = null
+    private var _responseFormat: ResponseFormat? = null
+    private var _speed: Double? = null
+    private var _timestampGranularities: List<TimestampGranularity>? = null
+    private var _temperature: Double? = null
+
     override fun model(model: TTSModel): Audio {
-        TODO("Not yet implemented")
+        this._model = model
+        return this
     }
 
     override fun input(input: String): Audio {
-        TODO("Not yet implemented")
+        this._input = input
+        return this
     }
 
     override fun voice(voice: Voice): Audio {
-        TODO("Not yet implemented")
+        this._voice = voice
+        return this
     }
 
     override fun file(file: String): Audio {
-        TODO("Not yet implemented")
+        this._file = file
+        return this
     }
 
     override fun prompt(prompt: String): Audio {
-        TODO("Not yet implemented")
+        this._prompt = prompt
+        return this
     }
 
     override fun responseFormat(format: ResponseFormat): Audio {
-        TODO("Not yet implemented")
+        this._responseFormat = format
+        return this
     }
 
     override fun speed(speed: Double): Audio {
-        TODO("Not yet implemented")
+        this._speed = speed
+        return this
     }
 
     override fun timestampGranularities(list: List<TimestampGranularity>): Audio {
-        TODO("Not yet implemented")
+        this._timestampGranularities = list
+        return this
     }
 
     override fun temperature(temperature: Double): Audio {
-        TODO("Not yet implemented")
+        this._temperature = temperature
+        return this
     }
 
+    override suspend fun speech(): Flow<ByteArray> {
+        val request = CreateSpeechRequest(
+            model = _model?.value,
+            input =_input,
+            voice =_voice?.value,
+            responseFormat = _responseFormat?.value,
+            speed = _speed,
+        )
+        return repository.createSpeech(request)
+    }
 
-    override suspend fun speech(request: CreateSpeechRequest): CreateSpeechResponse {
-        TODO("Not yet implemented")
+    override suspend fun speechWithFile(context: Context): Flow<Uri> {
+        return flow {
+            val audioByteArray = speech().first()
+            val outputFile = File(context.getExternalFilesDir(null), "speech.mp3")
+            withContext(Dispatchers.IO) {
+                outputFile.writeBytes(audioByteArray)
+            }
+            val fileUri: Uri = Uri.fromFile(outputFile)
+            emit(fileUri)
+        }
     }
 
     override suspend fun transcription(request: CreateTranscriptionRequest): CreateTranscriptionResponse {

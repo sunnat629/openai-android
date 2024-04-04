@@ -15,15 +15,20 @@ import dev.sunnat629.openai_client.models.audio.CreateTranslationResponse
 import dev.sunnat629.openai_client.networks.ApiResult
 import dev.sunnat629.openai_client.networks.postRequest
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class AudioRepositoryImpl(private val client: HttpClient) : AudioRepository {
 
     private val baseUrl = "https://api.openai.com/v1/audio"
-    override suspend fun createSpeech(request: CreateSpeechRequest): CreateSpeechResponse {
-        return client.postRequest(
-            url = "$baseUrl/speech",
-            request = request
-        )
+
+    override fun createSpeech(request: CreateSpeechRequest): Flow<ByteArray> {
+        return flow {
+            emit(client.postRequest(
+                url = "$baseUrl/speech",
+                request = request
+            ))
+        }
     }
 
     override suspend fun createTranscription(request: CreateTranscriptionRequest): CreateTranscriptionResponse {
