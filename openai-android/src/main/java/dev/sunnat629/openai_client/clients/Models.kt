@@ -1,7 +1,6 @@
-package dev.sunnat629.openai_client.clients.models
+package dev.sunnat629.openai_client.clients
 
 import dev.sunnat629.openai_client.apis.models.ModelsRepository
-import dev.sunnat629.openai_client.clients.BaseUseCases
 import dev.sunnat629.openai_client.models.models.ListModelsResponse
 import dev.sunnat629.openai_client.models.models.ModelResponse
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +11,15 @@ import kotlinx.coroutines.flow.flow
  * Allows for setting up model parameters and provides methods to retrieve models
  * or specific model details.
  */
-interface Models : BaseUseCases<Models> {
+interface Models {
+
+    /**
+     * Sets the model identifier or name.
+     *
+     * @param model A string representing the model identifier.
+     * @return The instance of the implementing class for fluent chaining.
+     */
+    fun model(model: String): Models
 
     /**
      * Retrieves a list of models available.
@@ -32,27 +39,9 @@ interface Models : BaseUseCases<Models> {
 internal class ModelsImpl(private val repository: ModelsRepository) : Models {
 
     private var _model: String? = null
-    private var _role: String? = null
-    private var _text: String? = null
-    private var _imageUrl: String? = null
 
     override fun model(model: String): Models {
         this._model = model
-        return this
-    }
-
-    override fun role(role: String): Models {
-        this._role = role
-        return this
-    }
-
-    override fun text(text: String): Models {
-        this._text = text
-        return this
-    }
-
-    override fun imageUrl(imageUrl: String): Models {
-        this._imageUrl = imageUrl
         return this
     }
 
@@ -61,6 +50,9 @@ internal class ModelsImpl(private val repository: ModelsRepository) : Models {
     }
 
     override suspend fun retrieveModel(): Flow<ModelResponse> {
-        return flow { emit(repository.retrieveModel(_model!!)) }
+        return flow {
+            if (_model == null) throw NullPointerException("Model is null")
+            emit(repository.retrieveModel(_model!!))
+        }
     }
 }

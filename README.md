@@ -38,21 +38,21 @@ Explore detailed wiki on how to effectively use the OpenAI API client for Androi
 
 #### Available
 
-- [Chat](wiki/Chat.md)
-- [Models](wiki/Models.md)
-- [Moderations](wiki/Moderations.md)
+- **Chat**: [API](wiki/Chat.md), [Interfaces](wiki/ChatInterfaces.md)
+- **Models**: [API](wiki/Models.md), [Interfaces](wiki/ModelsInterfaces.md)
+- **Moderations** [API](wiki/Moderations.md), [Interfaces](wiki/ModerationsInterfaces.md)
 
 #### Upcoming
 
-- [Audio](wiki/Audio.md)
-- [Assistants](wiki/Assistants.md)
-- [Embeddings](wiki/Embeddings.md)
-- [Files](wiki/Files.md)
-- [Fine-tuning](wiki/Fine-tuning.md)
-- [Images](wiki/Images.md)
-- [Messages](wiki/Messages.md)
-- [Runs](wiki/Runs.md)
-- [Threads](wiki/Threads.md)
+- **Audio**: [API](wiki/Audio.md), [Interfaces](wiki/AudioInterfaces.md)
+- **Assistants**: [API](wiki/Assistants.md), [Interfaces](wiki/AssistantsInterfaces.md)
+- **Embeddings**: [API](wiki/Embeddings.md), [Interfaces](wiki/EmbeddingsInterfaces.md)
+- **Files**: [API](wiki/Files.md), [Interfaces](wiki/FilesInterfaces.md)
+- **Fine-tuning**: [API](wiki/FineTuning.md), [Interfaces](wiki/FineTuningInterfaces.md)
+- **Images**: [API](wiki/Images.md), [Interfaces](wiki/ImagesInterfaces.md)
+- **Messages**: [API](wiki/Messages.md), [Interfaces](wiki/MessagesInterfaces.md)
+- **Runs**: [API](wiki/Runs.md), [Interfaces](wiki/RunsInterfaces.md)
+- **Threads**: [API](wiki/Threads.md), [Interfaces](wiki/ThreadsInterfaces.md)
 
 ## ℹ️ Sample Apps
 

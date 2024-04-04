@@ -28,10 +28,12 @@ import dev.sunnat629.openai_client.apis.moderation.ModerationsRepository
 import dev.sunnat629.openai_client.apis.moderation.ModerationsRepositoryImpl
 import dev.sunnat629.openai_client.apis.threads.ThreadRepository
 import dev.sunnat629.openai_client.apis.threads.ThreadRepositoryImpl
-import dev.sunnat629.openai_client.clients.chats.Chat
-import dev.sunnat629.openai_client.clients.chats.ChatImpl
-import dev.sunnat629.openai_client.clients.models.Models
-import dev.sunnat629.openai_client.clients.models.ModelsImpl
+import dev.sunnat629.openai_client.clients.Chat
+import dev.sunnat629.openai_client.clients.ChatImpl
+import dev.sunnat629.openai_client.clients.Models
+import dev.sunnat629.openai_client.clients.ModelsImpl
+import dev.sunnat629.openai_client.clients.Moderations
+import dev.sunnat629.openai_client.clients.ModerationsImpl
 import dev.sunnat629.openai_client.models.openaAI.OpenAIBuilderConfig
 import dev.sunnat629.openai_client.networks.ktorHttpClient
 import io.ktor.client.HttpClient
@@ -82,6 +84,7 @@ object KoinModules {
     private val useCaseModule = module {
         factory<Chat> { ChatImpl(get()) }
         factory<Models> { ModelsImpl(get()) }
+        factory<Moderations> { ModerationsImpl(get()) }
     }
 
     private val repositoryModule = module {
