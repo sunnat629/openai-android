@@ -1,4 +1,4 @@
-## OpenAI Chat API Integration with Kotlin - A Developer's Wiki
+## Wiki: Interacting with OpenAI Chat in Android
 
 Integrating OpenAI's Chat API into your Android application using Kotlin allows you to leverage the power of GPT-3.5 (or the latest models) for generating human-like text based on the input provided. This wiki covers how to set up and use the Chat API to interact with the OpenAI service in a Kotlin-based Android project.
 
@@ -81,3 +81,5 @@ The response from the OpenAI service is captured in the `collect` block, where y
 
 - `loading` and `chat` are state holders you should define based on your UI architecture (e.g., using `MutableState` in Jetpack Compose).
 - This example uses Kotlin Coroutines for asynchronous operations. Ensure you're familiar with coroutine basics and lifecycle-aware components in Android to prevent memory leaks.
+
+### [Official OpenAi API Reference for Chat](https://platform.openai.com/docs/api-reference/chat)
