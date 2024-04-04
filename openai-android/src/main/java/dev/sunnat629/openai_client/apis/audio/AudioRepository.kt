@@ -16,7 +16,7 @@ import dev.sunnat629.openai_client.networks.ApiResult
 
 interface AudioRepository {
 
-    suspend fun createSpeech(request: CreateSpeechRequest): ApiResult<CreateSpeechResponse>
-    suspend fun createTranscription(request: CreateTranscriptionRequest): ApiResult<CreateTranscriptionResponse>
-    suspend fun createTranslation(request: CreateTranslationRequest): ApiResult<CreateTranslationResponse>
+    suspend fun createSpeech(request: CreateSpeechRequest): CreateSpeechResponse
+    suspend fun createTranscription(request: CreateTranscriptionRequest): CreateTranscriptionResponse
+    suspend fun createTranslation(request: CreateTranslationRequest): CreateTranslationResponse
 }

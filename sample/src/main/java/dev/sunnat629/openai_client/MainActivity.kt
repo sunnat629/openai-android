@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
                     LaunchedEffect(Unit) {
                         lifecycleScope.launch {
-                            openAI.moderations
+                            openAI.audio
                                 .input(listOf(
                                     "I want to be a footballer.",
                                     "I want to kill you."

@@ -19,21 +19,21 @@ import io.ktor.client.HttpClient
 class AudioRepositoryImpl(private val client: HttpClient) : AudioRepository {
 
     private val baseUrl = "https://api.openai.com/v1/audio"
-    override suspend fun createSpeech(request: CreateSpeechRequest): ApiResult<CreateSpeechResponse> {
+    override suspend fun createSpeech(request: CreateSpeechRequest): CreateSpeechResponse {
         return client.postRequest(
             url = "$baseUrl/speech",
             request = request
         )
     }
 
-    override suspend fun createTranscription(request: CreateTranscriptionRequest): ApiResult<CreateTranscriptionResponse> {
+    override suspend fun createTranscription(request: CreateTranscriptionRequest): CreateTranscriptionResponse {
         return client.postRequest(
             url = "$baseUrl/transcriptions",
             request = request
         )
     }
 
-    override suspend fun createTranslation(request: CreateTranslationRequest): ApiResult<CreateTranslationResponse> {
+    override suspend fun createTranslation(request: CreateTranslationRequest): CreateTranslationResponse {
         return client.postRequest(
             url = "$baseUrl/translations",
             request = request

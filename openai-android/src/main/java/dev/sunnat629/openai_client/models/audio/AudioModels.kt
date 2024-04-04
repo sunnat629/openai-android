@@ -83,3 +83,39 @@ data class CreateTranslationRequest(
 data class CreateTranslationResponse(
     @SerialName("text") val text: String
 )
+
+enum class TTSModel(val value: String) {
+    TTS1("tts-1"),
+    TTS1HD("tts-1-hd")
+}
+
+enum class Voice(val value: String) {
+    ALLOY("alloy"),
+    ECHO("echo"),
+    FABLE("fable"),
+    ONYX("onyx"),
+    NOVA("nova"),
+    SHIMMER("shimmer")
+}
+
+enum class ResponseFormat(val value: String) {
+    MP3("mp3"),
+    OPUS("opus"),
+    AAC("aac"),
+    FLAC("flac"),
+    WAV("wav"),
+    PCM("pcm")
+}
+
+enum class ResponseFormatString(val value: String) {
+    JSON("json"),
+    TEXT("text"),
+    SRT("srt"),
+    VERBOSE_JSON("verbose_json"),
+    VTT("vtt")
+}
+
+enum class TimestampGranularity(val value: String) {
+    WORD("word"),
+    SEGMENT("segment")
+}

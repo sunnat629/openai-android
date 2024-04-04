@@ -28,6 +28,8 @@ import dev.sunnat629.openai_client.apis.moderation.ModerationsRepository
 import dev.sunnat629.openai_client.apis.moderation.ModerationsRepositoryImpl
 import dev.sunnat629.openai_client.apis.threads.ThreadRepository
 import dev.sunnat629.openai_client.apis.threads.ThreadRepositoryImpl
+import dev.sunnat629.openai_client.clients.Audio
+import dev.sunnat629.openai_client.clients.AudioImpl
 import dev.sunnat629.openai_client.clients.Chat
 import dev.sunnat629.openai_client.clients.ChatImpl
 import dev.sunnat629.openai_client.clients.Models
@@ -82,6 +84,7 @@ object KoinModules {
     }
 
     private val useCaseModule = module {
+        factory<Audio> { AudioImpl(get()) }
         factory<Chat> { ChatImpl(get()) }
         factory<Models> { ModelsImpl(get()) }
         factory<Moderations> { ModerationsImpl(get()) }
