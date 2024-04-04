@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,9 +48,12 @@ class MainActivity : ComponentActivity() {
 
                     LaunchedEffect(Unit) {
                         lifecycleScope.launch {
-                            openAI.models
-                                .model("gpt-3.5-turbo")
-                                .retrieveModel()
+                            openAI.moderations
+                                .input(listOf(
+                                    "I want to be a footballer.",
+                                    "I want to kill you."
+                                ))
+                                .moderate()
                                 .onStart {
                                     loading.value = true
                                 }
@@ -60,8 +63,8 @@ class MainActivity : ComponentActivity() {
                                 }
                                 .collect { response ->
                                     loading.value = false
-                                    model.value = response.toString()
-                                    chat.value = response.objectContent.plus(": ${response.id} || ownedBy: ${response.ownedBy}")
+                                    chat.value = response.toString()
+                                    model.value = "flagged: ${response.results?.map { it?.flagged }}"
                                 }
                         }
                     }
@@ -69,30 +72,37 @@ class MainActivity : ComponentActivity() {
 
                     if (loading.value) CircularProgressIndicator()
                     else {
-                        Column(
+                        LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(10.dp)
                         ) {
-                            Text(
-                                text = "modelMain: ${modelMain.value}",
-                            )
+                            item {
+                                Text(
+                                    text = "modelMain: ${modelMain.value}",
+                                )
 
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Text(
-                                text = "model: ${model.value}",
-                            )
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
+                            item {
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                                Text(
+                                    text = "model: ${model.value}",
+                                )
 
-                            Text(
-                                text = "user: What's the name of the capital of Bangladesh?",
-                            )
+                                Spacer(modifier = Modifier.height(10.dp))
 
-                            Spacer(modifier = Modifier.height(10.dp))
-                            Text(
-                                text = chat.value,
-                            )
+                            }
+                            item {
+                                Text(
+                                    text = "user: What's the name of the capital of Bangladesh?",
+                                )
+
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Text(
+                                    text = chat.value,
+                                )
+                            }
                         }
                     }
                 }
