@@ -4,10 +4,9 @@
  * Copyright ©2024 Sunnat629.dev. All rights reserved.
  */
 
-package dev.sunnat629.openai_client.clients.chats
+package dev.sunnat629.openai_client.clients
 
 import dev.sunnat629.openai_client.apis.chats.ChatRepository
-import dev.sunnat629.openai_client.clients.BaseUseCases
 import dev.sunnat629.openai_client.models.chats.ChatContent
 import dev.sunnat629.openai_client.models.chats.ChatMessage
 import dev.sunnat629.openai_client.models.chats.ChatRequest
@@ -23,8 +22,40 @@ import kotlinx.coroutines.flow.flow
  * Allows for setting up chat parameters and provides methods to control chat features
  * such as streaming, log probabilities, token limits, and tool choices.
  */
-interface Chat : BaseUseCases<Chat> {
+interface Chat {
 
+    /**
+     * Sets the model identifier or name.
+     *
+     * @param model A string representing the model identifier.
+     * @return The instance of the implementing class for fluent chaining.
+     */
+    fun model(model: String): Chat
+
+    /**
+     * Sets the role involved in the use case, such as 'user' or 'system'.
+     *
+     * @param role A string representing the role.
+     * @return The instance of the implementing class for fluent chaining.
+     */
+    fun role(role: String): Chat
+
+    /**
+     * Sets the text content for the use case.
+     *
+     * @param text A string representing the text content.
+     * @return The instance of the implementing class for fluent chaining.
+     */
+    fun text(text: String): Chat
+
+    /**
+     * Sets the image URL if the use case involves an image.
+     *
+     * @param imageUrl A string representing the URL of the image.
+     * @return The instance of the implementing class for fluent chaining.
+     */
+    fun imageUrl(imageUrl: String): Chat
+    
     /**
      * Enables or disables the streaming of chat responses.
      *

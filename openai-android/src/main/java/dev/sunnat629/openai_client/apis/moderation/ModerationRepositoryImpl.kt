@@ -6,6 +6,7 @@
 
 package dev.sunnat629.openai_client.apis.moderation
 
+import dev.sunnat629.openai_client.models.moderation.ModerationResponse
 import dev.sunnat629.openai_client.networks.postRequest
 import io.ktor.client.HttpClient
 
@@ -13,10 +14,10 @@ class ModerationsRepositoryImpl(private val httpClient: HttpClient) : Moderation
 
     private val baseUrl = "https://api.openai.com/v1/moderations"
 
-    override suspend fun createModeration(request: Any): Any {
+    override suspend fun createModeration(input: Any): ModerationResponse {
         return httpClient.postRequest(
             url = baseUrl,
-            request = request
+            request = input
         )
     }
 }
