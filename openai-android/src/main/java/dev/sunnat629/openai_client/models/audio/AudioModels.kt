@@ -46,7 +46,7 @@ data class CreateSpeechResponse(
  * @param language The language of the input audio.
  */
 @Serializable
-data class CreateTranscriptionRequest(
+data class TranscriptionRequest(
     @SerialName("file") val file: String? = null,
     @SerialName("model") val model: String? = null,
     @SerialName("language") val language: String? = null
@@ -58,7 +58,7 @@ data class CreateTranscriptionRequest(
  * @param text The transcribed text from the audio input.
  */
 @Serializable
-data class CreateTranscriptionResponse(
+data class TranscriptionResponse(
     @SerialName("text") val text: String? = null,
 )
 
@@ -80,7 +80,7 @@ data class CreateTranslationRequest(
  * @param text The translated text from the audio input.
  */
 @Serializable
-data class CreateTranslationResponse(
+data class TranslationResponse(
     @SerialName("text") val text: String? = null,
 )
 

@@ -1,13 +1,19 @@
 package dev.sunnat629.openai_client
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
@@ -39,6 +46,14 @@ import dev.sunnat629.openai_client.ui.theme.OpenAiAndroidTheme
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import java.io.File
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Button
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
 
@@ -55,10 +70,31 @@ class MainActivity : ComponentActivity() {
                 val model = remember { mutableStateOf("") }
                 val modelMain = remember { mutableStateOf("") }
                 val chat = remember { mutableStateOf("") }
-                val loading = remember { mutableStateOf(true) }
+                val loading = remember { mutableStateOf(false) }
                 val audioUrl = remember { mutableStateOf<Uri?>(null) }
 
                 val exoPlayer = remember { ExoPlayer.Builder(context).build() }
+
+
+                val isStoragePermissionGranted = remember { mutableStateOf(hasStoragePermission(context)) }
+
+                val storagePermissionState = remember {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        arrayOf(Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_AUDIO)
+                    } else arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
+
+                val launchPermissionRequest = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestMultiplePermissions()
+                ) { permissionsMap ->
+                    // Handle the permissions result
+                    val granted = permissionsMap.entries.all { it.value }
+                    isStoragePermissionGranted.value = granted
+                }
+
+                LaunchedEffect(Unit) {
+                    launchPermissionRequest.launch(storagePermissionState)
+                }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -71,13 +107,20 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    LaunchedEffect(Unit) {
+                    LaunchedEffect(audioUrl.value) {
                         lifecycleScope.launch {
+                            if (audioUrl.value == null) return@launch
+                            val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+//                            val file = File(audioUrl.value.toString())
+                            Log.e("ASDF", "*******")
+                            Log.e("ASDF", audioUrl.value.toString())
+//                            Log.e("ASDF", file.isFile.toString())
+//                            Log.e("ASDF", file.isAbsolute.toString())
+                            Log.w("ASDF", hasStoragePermission(context).toString())
                             openAI.audio
-                                .model(TTSModel.TTS1)
-                                .input("I LOVE YOU...")
-                                .voice(Voice.ECHO)
-                                .speechWithFile(context)
+                                .model("whisper-1")
+                                .file(context, audioUrl.value!!)
+                                .transcription()
                                 .onStart {
                                     loading.value = true
                                 }
@@ -88,7 +131,6 @@ class MainActivity : ComponentActivity() {
                                 .collect { response ->
                                     loading.value = false
                                     chat.value = response.toString()
-                                    audioUrl.value = response
                                     Log.e("ASDF", response.toString())
                                     model.value = TTSModel.TTS1.value
                                 }
@@ -131,8 +173,14 @@ class MainActivity : ComponentActivity() {
                             }
 
                             item {
-                                if (audioUrl.value != null)
-                                AudioPlayerComposable(context, audioUrl.value!!)
+                                if (audioUrl.value != null)  {
+                                    AudioPlayerComposable(context, audioUrl.value!!)
+                                }
+                            Spacer(modifier = Modifier.height(10.dp))
+                            }
+
+                            item {
+                                MySendMessageUI(audioUrl)
                             }
                         }
                     }
@@ -181,6 +229,33 @@ class MainActivity : ComponentActivity() {
         chat: MutableState<String>,
         model: MutableState<String>
     ) {
+        val context = LocalContext.current
+        val audioUrl = remember { mutableStateOf<Uri?>(null) }
+
+        LaunchedEffect(Unit) {
+            lifecycleScope.launch {
+                openAI.audio
+                    .model(TTSModel.TTS1)
+                    .input("I LOVE YOU...")
+                    .voice(Voice.ECHO)
+                    .speechWithUri(context)
+                    .onStart {
+                        loading.value = true
+                    }
+                    .catch { exception ->
+                        loading.value = false
+                        chat.value = "Failure: ${exception.message}"
+                    }
+                    .collect { response ->
+                        loading.value = false
+                        chat.value = response.toString()
+                        audioUrl.value = response
+                        Log.e("ASDF", response.toString())
+                        model.value = TTSModel.TTS1.value
+                    }
+            }
+        }
+
         LaunchedEffect(Unit) {
             lifecycleScope.launch {
                 openAI.models
@@ -298,6 +373,67 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    @Composable
+    fun MySendMessageUI(audioUrl: MutableState<Uri?>) {
+        var text by remember { mutableStateOf("") }
+        var audioUri by remember { mutableStateOf<Uri?>(null) }
+        var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+        // Launchers for picking audio and image
+        val pickAudioLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            audioUri = uri
+        }
+
+        val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+            imageUri = uri
+        }
+
+        Column(modifier = Modifier.padding(16.dp)) {
+            BasicTextField(
+                value = text,
+                onValueChange = { text = it },
+                modifier = Modifier.padding(bottom = 8.dp),
+                decorationBox = { innerTextField ->
+                    Row {
+                        if (text.isEmpty()) Text("Type a message...", color = Color.Gray)
+                        innerTextField()
+                    }
+                }
+            )
+
+            Row {
+                Button(onClick = { pickAudioLauncher.launch(arrayOf("audio/*")) }) {
+//                Button(onClick = { pickAudioLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)) }) {
+                    Text("Attach Audio")
+                }
+                Button(onClick = { pickImageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    modifier = Modifier.padding(start = 8.dp)) {
+                    Text("Attach Image")
+                }
+            }
+
+            Button(
+                onClick = {
+                    // Implement the logic to convert the text, audioUri, and imageUri to byte array and send via API
+                    // For demonstration, we're just printing the Uris
+                    println("Sending text: $text")
+                    audioUri?.let { println("Audio Uri: $it") }
+                    imageUri?.let { println("Image Uri: $it") }
+
+                    // Reset after sending
+                    text = ""
+                    audioUrl.value = audioUri
+                    audioUri = null
+                    imageUri = null
+                },
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Send")
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -315,3 +451,8 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
+
+fun hasStoragePermission(context: Context): Boolean =
+    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+            PackageManager.PERMISSION_GRANTED

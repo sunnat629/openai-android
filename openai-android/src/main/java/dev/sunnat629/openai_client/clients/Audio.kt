@@ -9,18 +9,14 @@ package dev.sunnat629.openai_client.clients
 import android.content.Context
 import android.net.Uri
 import dev.sunnat629.openai_client.apis.audio.AudioRepository
-import dev.sunnat629.openai_client.apis.audio.AudioRepositoryImpl
 import dev.sunnat629.openai_client.models.audio.CreateSpeechRequest
-import dev.sunnat629.openai_client.models.audio.CreateSpeechResponse
-import dev.sunnat629.openai_client.models.audio.CreateTranscriptionRequest
-import dev.sunnat629.openai_client.models.audio.CreateTranscriptionResponse
-import dev.sunnat629.openai_client.models.audio.CreateTranslationRequest
-import dev.sunnat629.openai_client.models.audio.CreateTranslationResponse
+import dev.sunnat629.openai_client.models.audio.TranscriptionResponse
+import dev.sunnat629.openai_client.models.audio.TranslationResponse
 import dev.sunnat629.openai_client.models.audio.ResponseFormat
 import dev.sunnat629.openai_client.models.audio.TTSModel
 import dev.sunnat629.openai_client.models.audio.TimestampGranularity
 import dev.sunnat629.openai_client.models.audio.Voice
-import dev.sunnat629.openai_client.networks.ApiResult
+import dev.sunnat629.openai_client.utils.uriToByteArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -37,6 +33,8 @@ interface Audio {
      * @return [Audio] instance for chaining.
      */
     fun model(model: TTSModel): Audio
+
+    fun model(model: String): Audio
 
     /**
      * Sets the input text for generating audio.
@@ -60,7 +58,7 @@ interface Audio {
      * @param file The audio file object to transcribe or translate.
      * @return [Audio] instance for chaining.
      */
-    fun file(file: String): Audio
+    fun file(context: Context, file: Uri): Audio
 
     /**
      * Sets the prompt to guide the model's style or to continue a previous segment.
@@ -104,17 +102,18 @@ interface Audio {
 
 
     suspend fun speech(): Flow<ByteArray>
-    suspend fun speechWithFile(context: Context): Flow<Uri>
-    suspend fun transcription(request: CreateTranscriptionRequest): CreateTranscriptionResponse
-    suspend fun translation(request: CreateTranslationRequest): CreateTranslationResponse
+    suspend fun speechWithUri(context: Context): Flow<Uri>
+    suspend fun transcription(): Flow<TranscriptionResponse>
+    suspend fun translation(): Flow<TranslationResponse>
 }
 
 class AudioImpl(private val repository: AudioRepository) : Audio {
 
-    private var _model: TTSModel? = null
+    private var _context: Context? = null
+    private var _model: String? = null
     private var _input: String? = null
     private var _voice: Voice? = null
-    private var _file: String? = null
+    private var _file: Uri? = null
     private var _prompt: String? = null
     private var _responseFormat: ResponseFormat? = null
     private var _speed: Double? = null
@@ -122,6 +121,11 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
     private var _temperature: Double? = null
 
     override fun model(model: TTSModel): Audio {
+        this._model = model.value
+        return this
+    }
+
+    override fun model(model: String): Audio {
         this._model = model
         return this
     }
@@ -136,7 +140,8 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
         return this
     }
 
-    override fun file(file: String): Audio {
+    override fun file(context: Context, file: Uri): Audio {
+        this._context = context
         this._file = file
         return this
     }
@@ -168,7 +173,7 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
 
     override suspend fun speech(): Flow<ByteArray> {
         val request = CreateSpeechRequest(
-            model = _model?.value,
+            model = _model,
             input =_input,
             voice =_voice?.value,
             responseFormat = _responseFormat?.value,
@@ -177,7 +182,7 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
         return repository.createSpeech(request)
     }
 
-    override suspend fun speechWithFile(context: Context): Flow<Uri> {
+    override suspend fun speechWithUri(context: Context): Flow<Uri> {
         return flow {
             val audioByteArray = speech().first()
             val outputFile = File(context.getExternalFilesDir(null), "speech.mp3")
@@ -189,11 +194,15 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
         }
     }
 
-    override suspend fun transcription(request: CreateTranscriptionRequest): CreateTranscriptionResponse {
-        TODO("Not yet implemented")
+    override suspend fun transcription(): Flow<TranscriptionResponse> {
+        return flow {
+            if (_model == null || _file == null) throw NullPointerException("Content is null")
+            val byteArray = uriToByteArray(_context, _file!!) ?: throw NullPointerException("Content is null")
+            emit(repository.createTranscription(_model!!, byteArray))
+        }
     }
 
-    override suspend fun translation(request: CreateTranslationRequest): CreateTranslationResponse {
+    override suspend fun translation(): Flow<TranslationResponse> {
         TODO("Not yet implemented")
     }
 
