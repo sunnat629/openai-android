@@ -15,8 +15,8 @@ import dev.sunnat629.ai_client.networks.getRequest
 import io.ktor.client.HttpClient
 
 class FilesRepositoryImpl(private val httpClient: HttpClient) : FilesRepository {
+
     override suspend fun uploadFile(file: FileResponse): ApiResult<UploadFileRequest> {
-        // Implement the upload logic, potentially handling multipart/form-data for file upload
         return ApiResult.Failure(NotImplementedError())
     }
 
