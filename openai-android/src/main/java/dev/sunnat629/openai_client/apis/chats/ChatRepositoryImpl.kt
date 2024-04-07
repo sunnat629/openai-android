@@ -43,7 +43,6 @@ class ChatRepositoryImpl(private val client: HttpClient) : ChatRepository {
 
     override fun createChatSteam(request: ChatRequest, delay: Long): Flow<ChatResponse> {
         return flow {
-            Log.w("ASDF", "createChatSteam")
             val response: HttpResponse =
                 client.post(baseUrl) {
                     this.setBody(request)
@@ -60,9 +59,6 @@ class ChatRepositoryImpl(private val client: HttpClient) : ChatRepository {
                 // Process the channel line by line
                 while (!channel.isClosedForRead) {
                     val line: String = channel.readUTF8Line() ?: break
-
-                    Log.e("ASDF", line.toString())
-
                     val value: ChatResponse = when {
                         line.contains("[DONE]") -> break
                         line.startsWith("data:") ->

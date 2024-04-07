@@ -13,8 +13,11 @@ import dev.sunnat629.openai_client.models.audio.CreateSpeechRequest
 import dev.sunnat629.openai_client.models.audio.TranscriptionResponse
 import dev.sunnat629.openai_client.models.audio.TranslationResponse
 import dev.sunnat629.openai_client.models.audio.ResponseFormat
+import dev.sunnat629.openai_client.models.audio.ResponseFormatString
 import dev.sunnat629.openai_client.models.audio.TTSModel
 import dev.sunnat629.openai_client.models.audio.TimestampGranularity
+import dev.sunnat629.openai_client.models.audio.TranscriptionRequest
+import dev.sunnat629.openai_client.models.audio.TranslationRequest
 import dev.sunnat629.openai_client.models.audio.Voice
 import dev.sunnat629.openai_client.utils.uriToByteArray
 import kotlinx.coroutines.Dispatchers
@@ -75,6 +78,7 @@ interface Audio {
      * @return [Audio] instance for chaining.
      */
     fun responseFormat(format: ResponseFormat): Audio
+    fun responseFormatString(format: ResponseFormatString): Audio
 
     /**
      * Sets the speed of the generated audio.
@@ -90,6 +94,7 @@ interface Audio {
      * @param list A list of granularities, such as word or segment.
      * @return [Audio] instance for chaining.
      */
+    fun timestampGranularities(timestampGranularity: TimestampGranularity): Audio
     fun timestampGranularities(list: List<TimestampGranularity>): Audio
 
     /**
@@ -116,6 +121,7 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
     private var _file: Uri? = null
     private var _prompt: String? = null
     private var _responseFormat: ResponseFormat? = null
+    private var _responseFormatString: ResponseFormatString? = null
     private var _speed: Double? = null
     private var _timestampGranularities: List<TimestampGranularity>? = null
     private var _temperature: Double? = null
@@ -155,9 +161,18 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
         this._responseFormat = format
         return this
     }
+    override fun responseFormatString(format: ResponseFormatString): Audio {
+        this._responseFormatString = format
+        return this
+    }
 
     override fun speed(speed: Double): Audio {
         this._speed = speed
+        return this
+    }
+
+    override fun timestampGranularities(timestampGranularity: TimestampGranularity): Audio {
+        this._timestampGranularities = listOf(timestampGranularity)
         return this
     }
 
@@ -197,13 +212,31 @@ class AudioImpl(private val repository: AudioRepository) : Audio {
     override suspend fun transcription(): Flow<TranscriptionResponse> {
         return flow {
             if (_model == null || _file == null) throw NullPointerException("Content is null")
-            val byteArray = uriToByteArray(_context, _file!!) ?: throw NullPointerException("Content is null")
-            emit(repository.createTranscription(_model!!, byteArray))
+            val byteArray = uriToByteArray(_context, _file!!) ?:throw IllegalArgumentException("Audio file is required")
+
+            val request = TranscriptionRequest(
+                model = _model,
+                responseFormat = _responseFormatString?.value,
+                timestampGranularities = _timestampGranularities,
+            )
+            emit(repository.createTranscription(request, byteArray))
         }
     }
 
     override suspend fun translation(): Flow<TranslationResponse> {
-        TODO("Not yet implemented")
+        return flow {
+            if (_model == null || _file == null) throw NullPointerException("Content is null")
+            val byteArray = uriToByteArray(_context, _file!!) ?: throw IllegalArgumentException("Content is null")
+
+
+            val request = TranslationRequest(
+                model = _model,
+                responseFormat = _responseFormatString?.value,
+                prompt = _prompt,
+                temperature = _temperature,
+            )
+            emit(repository.createTranslation(request, byteArray))
+        }
     }
 
 }
