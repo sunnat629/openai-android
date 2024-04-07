@@ -6,16 +6,15 @@
 
 package dev.sunnat629.ai_client.apis.embeddings
 
-import dev.sunnat629.ai_client.models.embeddings.CreateEmbeddingsRequest
-import dev.sunnat629.ai_client.models.embeddings.CreateEmbeddingsResponse
-import dev.sunnat629.ai_client.networks.ApiResult
+import dev.sunnat629.ai_client.models.embeddings.EmbeddingsRequest
+import dev.sunnat629.ai_client.models.embeddings.EmbeddingsResponse
+import dev.sunnat629.ai_client.networks.URLs.EMBEDDINGS
 import dev.sunnat629.ai_client.networks.postRequest
 import io.ktor.client.HttpClient
 
 class EmbeddingsRepositoryImpl(private val client: HttpClient) : EmbeddingsRepository {
-    private val baseUrl = "https://api.openai.com/v1/embeddings"
 
-    override suspend fun createEmbedding(request: CreateEmbeddingsRequest): ApiResult<CreateEmbeddingsResponse> {
-        return client.postRequest(baseUrl, request)
+    override suspend fun createEmbedding(request: EmbeddingsRequest): EmbeddingsResponse {
+        return client.postRequest(EMBEDDINGS, request)
     }
 }

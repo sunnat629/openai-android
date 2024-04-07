@@ -6,12 +6,10 @@
 
 package dev.sunnat629.ai_client.apis.embeddings
 
-import dev.sunnat629.ai_client.models.embeddings.CreateEmbeddingsRequest
-import dev.sunnat629.ai_client.models.embeddings.CreateEmbeddingsResponse
-import dev.sunnat629.ai_client.networks.ApiResult
+import dev.sunnat629.ai_client.models.embeddings.EmbeddingsRequest
+import dev.sunnat629.ai_client.models.embeddings.EmbeddingsResponse
 
 interface EmbeddingsRepository {
 
-    // Embeddings Operations
-    suspend fun createEmbedding(request: CreateEmbeddingsRequest): ApiResult<CreateEmbeddingsResponse>
+    suspend fun createEmbedding(request: EmbeddingsRequest): EmbeddingsResponse
 }

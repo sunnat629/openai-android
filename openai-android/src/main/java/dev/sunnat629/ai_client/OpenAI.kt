@@ -9,6 +9,7 @@ package dev.sunnat629.ai_client
 import dev.sunnat629.ai_client.KoinModules.openAiAndroidLibModuleKoin
 import dev.sunnat629.ai_client.clients.Audio
 import dev.sunnat629.ai_client.clients.Chat
+import dev.sunnat629.ai_client.clients.Embeddings
 import dev.sunnat629.ai_client.clients.Models
 import dev.sunnat629.ai_client.clients.Moderations
 import dev.sunnat629.ai_client.models.openaAI.OpenAIBuilderConfig
@@ -21,6 +22,7 @@ interface OpenAI {
     val models: Models
     val moderations: Moderations
     val audio: Audio
+    val embeddings: Embeddings
 }
 
 internal class OpenAIImpl(configModel: OpenAIBuilderConfig) : OpenAI, KoinComponent {
@@ -36,6 +38,9 @@ internal class OpenAIImpl(configModel: OpenAIBuilderConfig) : OpenAI, KoinCompon
 
     private val _audio: Audio by inject()
     override val audio: Audio get() = _audio
+
+    private val _embeddings: Embeddings by inject()
+    override val embeddings: Embeddings get() = _embeddings
 
     init {
         openAiAndroidLibModuleKoin(configModel)
