@@ -7,6 +7,7 @@
 package dev.sunnat629.openai_client
 
 import dev.sunnat629.openai_client.KoinModules.openAiAndroidLibModuleKoin
+import dev.sunnat629.openai_client.clients.Audio
 import dev.sunnat629.openai_client.clients.Chat
 import dev.sunnat629.openai_client.clients.Models
 import dev.sunnat629.openai_client.clients.Moderations
@@ -19,6 +20,7 @@ interface OpenAI {
     val chat: Chat
     val models: Models
     val moderations: Moderations
+    val audio: Audio
 }
 
 internal class OpenAIImpl(configModel: OpenAIBuilderConfig) : OpenAI, KoinComponent {
@@ -31,6 +33,9 @@ internal class OpenAIImpl(configModel: OpenAIBuilderConfig) : OpenAI, KoinCompon
 
     private val _moderations: Moderations by inject()
     override val moderations: Moderations get() = _moderations
+
+    private val _audio: Audio by inject()
+    override val audio: Audio get() = _audio
 
     init {
         openAiAndroidLibModuleKoin(configModel)

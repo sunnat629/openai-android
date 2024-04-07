@@ -31,12 +31,6 @@ suspend inline fun <reified T> HttpClient.patchRequest(
     contentType: ContentType = ContentType.Application.Json,
 ): T = makeRequest(HttpMethod.Post, url, body = request, contentType = contentType)
 
-suspend inline fun <reified T> HttpClient.postRequestT(
-    url: String,
-    request: Any,
-    contentType: ContentType = ContentType.Application.Json,
-): T = makeRequest(HttpMethod.Post, url, body = request, contentType = contentType)
-
 suspend inline fun <reified T> HttpClient.postRequest(
     url: String,
     request: Any,

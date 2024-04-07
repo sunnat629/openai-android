@@ -20,11 +20,11 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class CreateSpeechRequest(
-    @SerialName("model") val model: String,
-    @SerialName("input") val input: String,
-    @SerialName("voice") val voice: String,
+    @SerialName("model") val model: String? = null,
+    @SerialName("input") val input: String? = null,
+    @SerialName("voice") val voice: String? = null,
     @SerialName("response_format") val responseFormat: String? = null,
-    @SerialName("speed") val speed: Double? = null
+    @SerialName("speed") val speed: Double? = null,
 )
 
 /**
@@ -35,7 +35,7 @@ data class CreateSpeechRequest(
  */
 @Serializable
 data class CreateSpeechResponse(
-    @SerialName("audio_url") val audioUrl: String
+    @SerialName("audio_url") val audioUrl: String? = null,
 )
 
 /**
@@ -46,9 +46,9 @@ data class CreateSpeechResponse(
  * @param language The language of the input audio.
  */
 @Serializable
-data class CreateTranscriptionRequest(
-    @SerialName("file") val file: String, // Placeholder for binary data
-    @SerialName("model") val model: String,
+data class TranscriptionRequest(
+    @SerialName("file") val file: String? = null,
+    @SerialName("model") val model: String? = null,
     @SerialName("language") val language: String? = null
 )
 
@@ -58,8 +58,8 @@ data class CreateTranscriptionRequest(
  * @param text The transcribed text from the audio input.
  */
 @Serializable
-data class CreateTranscriptionResponse(
-    @SerialName("text") val text: String
+data class TranscriptionResponse(
+    @SerialName("text") val text: String? = null,
 )
 
 /**
@@ -70,7 +70,7 @@ data class CreateTranscriptionResponse(
  */
 @Serializable
 data class CreateTranslationRequest(
-    @SerialName("file") val file: String, // Placeholder for binary data
+    @SerialName("file") val file: String? = null,
     @SerialName("model") val model: String
 )
 
@@ -80,6 +80,42 @@ data class CreateTranslationRequest(
  * @param text The translated text from the audio input.
  */
 @Serializable
-data class CreateTranslationResponse(
-    @SerialName("text") val text: String
+data class TranslationResponse(
+    @SerialName("text") val text: String? = null,
 )
+
+enum class TTSModel(val value: String) {
+    TTS1("tts-1"),
+    TTS1HD("tts-1-hd")
+}
+
+enum class Voice(val value: String) {
+    ALLOY("alloy"),
+    ECHO("echo"),
+    FABLE("fable"),
+    ONYX("onyx"),
+    NOVA("nova"),
+    SHIMMER("shimmer")
+}
+
+enum class ResponseFormat(val value: String) {
+    MP3("mp3"),
+    OPUS("opus"),
+    AAC("aac"),
+    FLAC("flac"),
+    WAV("wav"),
+    PCM("pcm")
+}
+
+enum class ResponseFormatString(val value: String) {
+    JSON("json"),
+    TEXT("text"),
+    SRT("srt"),
+    VERBOSE_JSON("verbose_json"),
+    VTT("vtt")
+}
+
+enum class TimestampGranularity(val value: String) {
+    WORD("word"),
+    SEGMENT("segment")
+}

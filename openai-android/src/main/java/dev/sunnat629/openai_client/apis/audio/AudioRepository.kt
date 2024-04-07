@@ -7,16 +7,14 @@
 package dev.sunnat629.openai_client.apis.audio
 
 import dev.sunnat629.openai_client.models.audio.CreateSpeechRequest
-import dev.sunnat629.openai_client.models.audio.CreateSpeechResponse
-import dev.sunnat629.openai_client.models.audio.CreateTranscriptionRequest
-import dev.sunnat629.openai_client.models.audio.CreateTranscriptionResponse
+import dev.sunnat629.openai_client.models.audio.TranscriptionResponse
 import dev.sunnat629.openai_client.models.audio.CreateTranslationRequest
-import dev.sunnat629.openai_client.models.audio.CreateTranslationResponse
-import dev.sunnat629.openai_client.networks.ApiResult
+import dev.sunnat629.openai_client.models.audio.TranslationResponse
+import kotlinx.coroutines.flow.Flow
 
 interface AudioRepository {
 
-    suspend fun createSpeech(request: CreateSpeechRequest): ApiResult<CreateSpeechResponse>
-    suspend fun createTranscription(request: CreateTranscriptionRequest): ApiResult<CreateTranscriptionResponse>
-    suspend fun createTranslation(request: CreateTranslationRequest): ApiResult<CreateTranslationResponse>
+    fun createSpeech(request: CreateSpeechRequest): Flow<ByteArray>
+    suspend fun createTranscription(model: String, byteArray: ByteArray): TranscriptionResponse
+    suspend fun createTranslation(request: CreateTranslationRequest): TranslationResponse
 }

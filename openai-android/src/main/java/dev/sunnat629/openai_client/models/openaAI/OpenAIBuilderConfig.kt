@@ -86,5 +86,5 @@ data class TimeoutNetwork(
     @SerialName("connect_timeout") val connectTimeout: Long? = null,
 
     // Maximum time of inactivity in milliseconds between two data packets.
-    @SerialName("socket_timeout") val socketTimeout: Long? = null
+    @SerialName("socket_timeout") val socketTimeout: Long? = 60000
 )
