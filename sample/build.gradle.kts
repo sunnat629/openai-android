@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "dev.sunnat629.openai_client"
+    namespace = "dev.sunnat629.ai_client"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "dev.sunnat629.openai_client"
+        applicationId = "dev.sunnat629.ai_client"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

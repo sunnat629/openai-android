@@ -12,7 +12,7 @@ For Android projects, Add the OpenAI API Android client to your project by inser
 
 ```kotlin
 dependencies {
-    implementation("dev.sunnat629.openai_client:openai-android:1.0.0")
+    implementation("dev.sunnat629.ai_client:openai-android:1.0.0")
 }
 ```
 
