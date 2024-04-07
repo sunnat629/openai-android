@@ -32,6 +32,8 @@ import dev.sunnat629.ai_client.clients.Audio
 import dev.sunnat629.ai_client.clients.AudioImpl
 import dev.sunnat629.ai_client.clients.Chat
 import dev.sunnat629.ai_client.clients.ChatImpl
+import dev.sunnat629.ai_client.clients.Embeddings
+import dev.sunnat629.ai_client.clients.EmbeddingsImpl
 import dev.sunnat629.ai_client.clients.Models
 import dev.sunnat629.ai_client.clients.ModelsImpl
 import dev.sunnat629.ai_client.clients.Moderations
@@ -86,6 +88,7 @@ object KoinModules {
     private val useCaseModule = module {
         factory<Audio> { AudioImpl(get()) }
         factory<Chat> { ChatImpl(get()) }
+        factory<Embeddings> { EmbeddingsImpl(get()) }
         factory<Models> { ModelsImpl(get()) }
         factory<Moderations> { ModerationsImpl(get()) }
     }

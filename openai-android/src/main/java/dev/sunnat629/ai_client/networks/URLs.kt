@@ -9,4 +9,6 @@ package dev.sunnat629.ai_client.networks
 internal object URLs {
 
     const val BASE_URL = "https://api.openai.com/v1"
+
+    const val EMBEDDINGS = "/embeddings"
 }
