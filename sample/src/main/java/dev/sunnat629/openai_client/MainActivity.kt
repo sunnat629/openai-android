@@ -54,6 +54,8 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import dev.sunnat629.openai_client.models.audio.ResponseFormatString
+import dev.sunnat629.openai_client.models.audio.TimestampGranularity
 
 class MainActivity : ComponentActivity() {
 
@@ -110,16 +112,13 @@ class MainActivity : ComponentActivity() {
                     LaunchedEffect(audioUrl.value) {
                         lifecycleScope.launch {
                             if (audioUrl.value == null) return@launch
-                            val downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-//                            val file = File(audioUrl.value.toString())
                             Log.e("ASDF", "*******")
                             Log.e("ASDF", audioUrl.value.toString())
-//                            Log.e("ASDF", file.isFile.toString())
-//                            Log.e("ASDF", file.isAbsolute.toString())
-                            Log.w("ASDF", hasStoragePermission(context).toString())
                             openAI.audio
                                 .model("whisper-1")
                                 .file(context, audioUrl.value!!)
+//                                .timestampGranularities(TimestampGranularity.WORD)
+                                .responseFormatString(ResponseFormatString.TEXT)
                                 .transcription()
                                 .onStart {
                                     loading.value = true
@@ -145,6 +144,11 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .padding(10.dp)
                         ) {
+
+                            item {
+                                MySendMessageUI(audioUrl)
+                            }
+
                             item {
                                 Text(
                                     text = "modelMain: ${modelMain.value}",
@@ -161,6 +165,14 @@ class MainActivity : ComponentActivity() {
                                 Spacer(modifier = Modifier.height(10.dp))
 
                             }
+
+                            item {
+                                if (audioUrl.value != null)  {
+                                    AudioPlayerComposable(context, audioUrl.value!!)
+                                }
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
+
                             item {
                                 Text(
                                     text = "user: What's the name of the capital of Bangladesh?",
@@ -172,16 +184,6 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
-                            item {
-                                if (audioUrl.value != null)  {
-                                    AudioPlayerComposable(context, audioUrl.value!!)
-                                }
-                            Spacer(modifier = Modifier.height(10.dp))
-                            }
-
-                            item {
-                                MySendMessageUI(audioUrl)
-                            }
                         }
                     }
                 }
@@ -383,10 +385,12 @@ class MainActivity : ComponentActivity() {
         // Launchers for picking audio and image
         val pickAudioLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             audioUri = uri
+            text = "Audio is attached"
         }
 
         val pickImageLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
             imageUri = uri
+            text = "Image is attached"
         }
 
         Column(modifier = Modifier.padding(16.dp)) {

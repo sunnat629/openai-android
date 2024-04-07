@@ -41,15 +41,12 @@ data class CreateSpeechResponse(
 /**
  * Request model for transcribing speech to text.
  *
- * @param file The audio file to be transcribed. In an actual request, this would be sent as binary data.
  * @param model The model ID to use for the transcription.
- * @param language The language of the input audio.
  */
-@Serializable
 data class TranscriptionRequest(
-    @SerialName("file") val file: String? = null,
-    @SerialName("model") val model: String? = null,
-    @SerialName("language") val language: String? = null
+    val model: String? = null,
+    val responseFormat: String? = null,
+    val timestampGranularities: List<TimestampGranularity>? = null,
 )
 
 /**
@@ -59,8 +56,53 @@ data class TranscriptionRequest(
  */
 @Serializable
 data class TranscriptionResponse(
-    @SerialName("text") val text: String? = null,
-)
+    @SerialName("task")
+    val task: String? = null,
+    @SerialName("language")
+    val language: String? = null,
+    @SerialName("duration")
+    val duration: Double? = null,
+    @SerialName("text")
+    val text: String? = null,
+    @SerialName("words")
+    val words: List<Word>? = null,
+    val segments: List<Segment>? = null,
+) {
+
+    @Serializable
+    data class Segment(
+        @SerialName("id")
+        val id: Int? = null,
+        @SerialName("seek")
+        val seek: Int? = null,
+        @SerialName("start")
+        val start: Double? = null,
+        @SerialName("end")
+        val end: Double? = null,
+        @SerialName("text")
+        val text: String? = null,
+        @SerialName("tokens")
+        val tokens: List<Int?>? = null,
+        @SerialName("temperature")
+        val temperature: Double? = null,
+        @SerialName("avg_logprob")
+        val avgLogprob: Double? = null,
+        @SerialName("compression_ratio")
+        val compressionRatio: Double? = null,
+        @SerialName("no_speech_prob")
+        val noSpeechProb: Double? = null
+    )
+
+    @Serializable
+    data class Word(
+        @SerialName("word")
+        val word: String? = null,
+        @SerialName("start")
+        val start: Double? = null,
+        @SerialName("end")
+        val end: Double? = null
+    )
+}
 
 /**
  * Request model for translating spoken language in an audio file.
@@ -68,10 +110,11 @@ data class TranscriptionResponse(
  * @param file The audio file containing spoken language to translate. Placeholder for binary data.
  * @param model The model ID to use for the translation.
  */
-@Serializable
-data class CreateTranslationRequest(
-    @SerialName("file") val file: String? = null,
-    @SerialName("model") val model: String
+data class TranslationRequest(
+     val model: String? = null,
+     val prompt: String? = null,
+    val responseFormat: String? = null,
+     val temperature: Double? = null,
 )
 
 /**
