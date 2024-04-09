@@ -19,9 +19,9 @@ import kotlinx.serialization.Serializable
  * @property user Optionally specifies a unique identifier for the end-user.
  */
 @Serializable
-data class CreateEmbeddingsRequest(
-    @SerialName("input") val input: List<String>,
+data class EmbeddingsRequest(
     @SerialName("model") val model: String,
+    @SerialName("input") val input: List<String>,
     @SerialName("encoding_format") val encodingFormat: String? = null,
     @SerialName("dimensions") val dimensions: Int? = null,
     @SerialName("user") val user: String? = null
@@ -36,7 +36,7 @@ data class CreateEmbeddingsRequest(
  * @property usage Statistics on the request usage, including token counts.
  */
 @Serializable
-data class CreateEmbeddingsResponse(
+data class EmbeddingsResponse(
     @SerialName("object") val objectContent: String,
     @SerialName("data") val data: List<EmbeddingData>,
     @SerialName("model") val model: String,

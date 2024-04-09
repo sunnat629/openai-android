@@ -108,7 +108,6 @@ interface Chat {
 
 internal class ChatImpl(private val repository: ChatRepository) : Chat {
 
-    private var _model: String? = null
     private var _role: String? = null
     private var _text: String? = null
     private var _imageUrl: String? = null
@@ -120,6 +119,7 @@ internal class ChatImpl(private val repository: ChatRepository) : Chat {
     private var _toolChoice: String? = null
     private var _tools: List<FunctionTool>? = null
 
+    private var _model: String? = null
     override fun model(model: String): Chat {
         this._model = model
         return this

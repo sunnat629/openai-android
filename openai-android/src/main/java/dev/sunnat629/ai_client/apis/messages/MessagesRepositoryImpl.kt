@@ -10,7 +10,6 @@ import dev.sunnat629.ai_client.models.messages.CreateMessageRequest
 import dev.sunnat629.ai_client.models.messages.ListMessageFilesResponse
 import dev.sunnat629.ai_client.models.messages.MessageFileDetails
 import dev.sunnat629.ai_client.models.messages.MessageResponse
-import dev.sunnat629.ai_client.networks.ApiResult
 import dev.sunnat629.ai_client.networks.getRequest
 import dev.sunnat629.ai_client.networks.postRequest
 import io.ktor.client.HttpClient
@@ -22,14 +21,14 @@ class MessageRepositoryImpl(private val httpClient: HttpClient) : MessageReposit
     override suspend fun createMessage(
         threadId: String,
         request: CreateMessageRequest
-    ): ApiResult<MessageResponse> {
+    ): MessageResponse {
         return httpClient.postRequest(
             url = "$baseUrl/$threadId/messages",
             request = request
         )
     }
 
-    override suspend fun listMessages(threadId: String): ApiResult<List<MessageResponse>> {
+    override suspend fun listMessages(threadId: String): List<MessageResponse> {
         return httpClient.getRequest(
             url = "$baseUrl/$threadId/messages"
         )
@@ -38,7 +37,7 @@ class MessageRepositoryImpl(private val httpClient: HttpClient) : MessageReposit
     override suspend fun retrieveMessage(
         threadId: String,
         messageId: String
-    ): ApiResult<MessageResponse> {
+    ): MessageResponse {
         return httpClient.getRequest(
             url = "$baseUrl/$threadId/messages/$messageId"
         )
@@ -47,7 +46,7 @@ class MessageRepositoryImpl(private val httpClient: HttpClient) : MessageReposit
     override suspend fun listMessageFiles(
         threadId: String,
         messageId: String
-    ): ApiResult<ListMessageFilesResponse> {
+    ): ListMessageFilesResponse {
         TODO("Not yet implemented")
     }
 
@@ -55,7 +54,7 @@ class MessageRepositoryImpl(private val httpClient: HttpClient) : MessageReposit
         threadId: String,
         messageId: String,
         fileId: String
-    ): ApiResult<MessageFileDetails> {
+    ): MessageFileDetails {
         TODO("Not yet implemented")
     }
 }

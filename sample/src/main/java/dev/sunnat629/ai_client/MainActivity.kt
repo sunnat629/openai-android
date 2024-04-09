@@ -111,12 +111,11 @@ class MainActivity : ComponentActivity() {
                             if (audioUrl.value == null) return@launch
                             Log.e("ASDF", "*******")
                             Log.e("ASDF", audioUrl.value.toString())
-                            openAI.audio
-                                .model("whisper-1")
-                                .file(context, audioUrl.value!!)
-//                                .timestampGranularities(TimestampGranularity.WORD)
-                                .responseFormatString(ResponseFormatString.TEXT)
-                                .transcription()
+                            openAI.embeddings
+                                .model("text-embedding-ada-002")
+                                .input("The food was delicious and the waiter...")
+                                .encodingFormat("float")
+                                .create()
                                 .onStart {
                                     loading.value = true
                                 }
@@ -230,6 +229,33 @@ class MainActivity : ComponentActivity() {
     ) {
         val context = LocalContext.current
         val audioUrl = remember { mutableStateOf<Uri?>(null) }
+
+        LaunchedEffect(audioUrl.value) {
+            lifecycleScope.launch {
+                if (audioUrl.value == null) return@launch
+                Log.e("ASDF", "*******")
+                Log.e("ASDF", audioUrl.value.toString())
+                openAI.audio
+                    .model("whisper-1")
+                    .file(context, audioUrl.value!!)
+//                                .timestampGranularities(TimestampGranularity.WORD)
+                    .responseFormatString(ResponseFormatString.TEXT)
+                    .transcription()
+                    .onStart {
+                        loading.value = true
+                    }
+                    .catch { exception ->
+                        loading.value = false
+                        chat.value = "Failure: ${exception.message}"
+                    }
+                    .collect { response ->
+                        loading.value = false
+                        chat.value = response.toString()
+                        Log.e("ASDF", response.toString())
+                        model.value = TTSModel.TTS1.value
+                    }
+            }
+        }
 
         LaunchedEffect(Unit) {
             lifecycleScope.launch {
@@ -434,7 +460,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }
 
 @Composable

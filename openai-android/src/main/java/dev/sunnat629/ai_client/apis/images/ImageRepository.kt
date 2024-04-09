@@ -11,7 +11,6 @@ import dev.sunnat629.ai_client.models.images.CreateImageRequest
 import dev.sunnat629.ai_client.models.images.CreateImageResponse
 import dev.sunnat629.ai_client.models.images.CreateImageVariationsRequest
 import dev.sunnat629.ai_client.models.images.CreateImageVariationsResponse
-import dev.sunnat629.ai_client.networks.ApiResult
 
 /**
  * Interface defining operations for creating and managing images with the OpenAI API.
@@ -24,7 +23,7 @@ interface ImageRepository {
      * @param request The request parameters for image creation.
      * @return ApiResult<CreateImageResponse> The created image or images.
      */
-    suspend fun createImage(request: CreateImageRequest): ApiResult<CreateImageResponse>
+    suspend fun createImage(request: CreateImageRequest): CreateImageResponse
 
     /**
      * Edits an existing image according to the specified modifications.
@@ -32,7 +31,7 @@ interface ImageRepository {
      * @param request The request parameters for image editing.
      * @return ApiResult<CreateImageResponse> The edited image.
      */
-    suspend fun editImage(request: CreateImageEditRequest): ApiResult<CreateImageResponse>
+    suspend fun editImage(request: CreateImageEditRequest): CreateImageResponse
 
     /**
      * Creates variations of a given image based on specified parameters.
@@ -40,5 +39,5 @@ interface ImageRepository {
      * @param request The request parameters for creating image variations.
      * @return ApiResult<Any> The created image variations.
      */
-    suspend fun createImageVariations(request: CreateImageVariationsRequest): ApiResult<CreateImageVariationsResponse>
+    suspend fun createImageVariations(request: CreateImageVariationsRequest): CreateImageVariationsResponse
 }

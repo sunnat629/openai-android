@@ -8,7 +8,6 @@ package dev.sunnat629.ai_client.apis.assistants
 
 import dev.sunnat629.ai_client.models.assistants.AssistantResponse
 import dev.sunnat629.ai_client.models.assistants.CreateAssistantRequest
-import dev.sunnat629.ai_client.networks.ApiResult
 import dev.sunnat629.ai_client.networks.deleteRequest
 import dev.sunnat629.ai_client.networks.getRequest
 import dev.sunnat629.ai_client.networks.patchRequest
@@ -20,20 +19,20 @@ class AssistantRepositoryImpl(private val httpClient: HttpClient) : AssistantRep
 
     private val baseUrl = "https://api.openai.com/v1/assistants"
 
-    override suspend fun createAssistant(request: CreateAssistantRequest): ApiResult<AssistantResponse> {
+    override suspend fun createAssistant(request: CreateAssistantRequest): AssistantResponse {
         return httpClient.postRequest(
             url = baseUrl,
             request = request
         )
     }
 
-    override suspend fun listAssistants(): ApiResult<List<AssistantResponse>> {
+    override suspend fun listAssistants(): List<AssistantResponse> {
         return httpClient.getRequest(
             url = baseUrl
         )
     }
 
-    override suspend fun retrieveAssistant(assistantId: String): ApiResult<AssistantResponse> {
+    override suspend fun retrieveAssistant(assistantId: String): AssistantResponse {
         return httpClient.getRequest(
             url = "$baseUrl/$assistantId"
         )
@@ -42,14 +41,14 @@ class AssistantRepositoryImpl(private val httpClient: HttpClient) : AssistantRep
     override suspend fun updateAssistant(
         assistantId: String,
         request: CreateAssistantRequest
-    ): ApiResult<AssistantResponse> {
+    ): AssistantResponse {
         return httpClient.patchRequest(
             url = "$baseUrl/$assistantId",
             request = request
         )
     }
 
-    override suspend fun deleteAssistant(assistantId: String): ApiResult<Unit> {
+    override suspend fun deleteAssistant(assistantId: String): Unit {
         return httpClient.deleteRequest(
             url = "$baseUrl/$assistantId"
         )
