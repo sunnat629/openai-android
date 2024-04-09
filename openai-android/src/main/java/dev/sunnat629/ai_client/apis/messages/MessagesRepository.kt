@@ -10,7 +10,6 @@ import dev.sunnat629.ai_client.models.messages.CreateMessageRequest
 import dev.sunnat629.ai_client.models.messages.ListMessageFilesResponse
 import dev.sunnat629.ai_client.models.messages.MessageFileDetails
 import dev.sunnat629.ai_client.models.messages.MessageResponse
-import dev.sunnat629.ai_client.networks.ApiResult
 
 
 // MessageRepository.kt
@@ -19,13 +18,13 @@ interface MessageRepository {
     suspend fun createMessage(
         threadId: String,
         request: CreateMessageRequest
-    ): ApiResult<MessageResponse>
+    ): MessageResponse
 
     /** Lists all messages in a thread */
-    suspend fun listMessages(threadId: String): ApiResult<List<MessageResponse>>
+    suspend fun listMessages(threadId: String): List<MessageResponse>
 
     /** Retrieves a message by ID */
-    suspend fun retrieveMessage(threadId: String, messageId: String): ApiResult<MessageResponse>
+    suspend fun retrieveMessage(threadId: String, messageId: String): MessageResponse
 
     /**
      * Lists all files associated with a specific message in a thread.
@@ -37,7 +36,7 @@ interface MessageRepository {
     suspend fun listMessageFiles(
         threadId: String,
         messageId: String
-    ): ApiResult<ListMessageFilesResponse>
+    ): ListMessageFilesResponse
 
     /**
      * Retrieves details for a specific file associated with a message in a thread.
@@ -54,6 +53,6 @@ interface MessageRepository {
         threadId: String,
         messageId: String,
         fileId: String
-    ): ApiResult<MessageFileDetails>
+    ): MessageFileDetails
 
 }

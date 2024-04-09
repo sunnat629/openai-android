@@ -8,7 +8,6 @@ package dev.sunnat629.ai_client.apis.threads
 
 import dev.sunnat629.ai_client.models.threads.CreateThreadRequest
 import dev.sunnat629.ai_client.models.threads.ThreadResponse
-import dev.sunnat629.ai_client.networks.ApiResult
 import dev.sunnat629.ai_client.networks.getRequest
 import dev.sunnat629.ai_client.networks.postRequest
 import io.ktor.client.HttpClient
@@ -17,20 +16,20 @@ class ThreadRepositoryImpl(private val httpClient: HttpClient) : ThreadRepositor
 
     private val baseUrl = "https://api.openai.com/v1/threads"
 
-    override suspend fun createThread(request: CreateThreadRequest): ApiResult<ThreadResponse> {
+    override suspend fun createThread(request: CreateThreadRequest): ThreadResponse {
         return httpClient.postRequest(
             url = baseUrl,
             request = request
         )
     }
 
-    override suspend fun listThreads(): ApiResult<List<ThreadResponse>> {
+    override suspend fun listThreads(): List<ThreadResponse> {
         return httpClient.getRequest(
             url = baseUrl
         )
     }
 
-    override suspend fun retrieveThread(threadId: String): ApiResult<ThreadResponse> {
+    override suspend fun retrieveThread(threadId: String): ThreadResponse {
         return httpClient.getRequest(
             url = "$baseUrl/$threadId"
         )

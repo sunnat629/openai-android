@@ -8,7 +8,6 @@ package dev.sunnat629.ai_client.apis.fineTuning
 
 import dev.sunnat629.ai_client.models.fineTuning.CreateFineTuningRequest
 import dev.sunnat629.ai_client.models.fineTuning.FineTuningResponse
-import dev.sunnat629.ai_client.networks.ApiResult
 import dev.sunnat629.ai_client.networks.getRequest
 import dev.sunnat629.ai_client.networks.postRequest
 import io.ktor.client.HttpClient
@@ -17,26 +16,26 @@ class FineTuningRepositoryImpl(private val httpClient: HttpClient) : FineTuningR
 
     private val baseUrl = "https://api.openai.com/v1/fine-tunes"
 
-    override suspend fun createFineTuningJob(request: CreateFineTuningRequest): ApiResult<FineTuningResponse> {
+    override suspend fun createFineTuningJob(request: CreateFineTuningRequest): FineTuningResponse {
         return httpClient.postRequest(
             url = baseUrl,
             request = request
         )
     }
 
-    override suspend fun listFineTuningJobs(): ApiResult<List<FineTuningResponse>> {
+    override suspend fun listFineTuningJobs(): List<FineTuningResponse> {
         return httpClient.getRequest(
             url = baseUrl
         )
     }
 
-    override suspend fun retrieveFineTuningJob(fineTuneId: String): ApiResult<FineTuningResponse> {
+    override suspend fun retrieveFineTuningJob(fineTuneId: String): FineTuningResponse {
         return httpClient.getRequest(
             url = "$baseUrl/$fineTuneId"
         )
     }
 
-    override suspend fun cancelFineTuningJob(fineTuneId: String): ApiResult<Unit> {
+    override suspend fun cancelFineTuningJob(fineTuneId: String): Unit {
         return httpClient.postRequest(
             url = "$baseUrl/$fineTuneId/cancel",
             request = ""

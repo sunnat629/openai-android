@@ -8,16 +8,15 @@ package dev.sunnat629.ai_client.apis.threads
 
 import dev.sunnat629.ai_client.models.threads.CreateThreadRequest
 import dev.sunnat629.ai_client.models.threads.ThreadResponse
-import dev.sunnat629.ai_client.networks.ApiResult
 
 // ThreadRepository.kt
 interface ThreadRepository {
     /** Creates a new thread */
-    suspend fun createThread(request: CreateThreadRequest): ApiResult<ThreadResponse>
+    suspend fun createThread(request: CreateThreadRequest): ThreadResponse
 
     /** Lists all threads */
-    suspend fun listThreads(): ApiResult<List<ThreadResponse>>
+    suspend fun listThreads(): List<ThreadResponse>
 
     /** Retrieves a thread by ID */
-    suspend fun retrieveThread(threadId: String): ApiResult<ThreadResponse>
+    suspend fun retrieveThread(threadId: String): ThreadResponse
 }
