@@ -46,11 +46,16 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import dev.sunnat629.ai_client.models.audio.ResponseFormatString
 
@@ -109,13 +114,11 @@ class MainActivity : ComponentActivity() {
                     LaunchedEffect(audioUrl.value) {
                         lifecycleScope.launch {
                             if (audioUrl.value == null) return@launch
-                            Log.e("ASDF", "*******")
-                            Log.e("ASDF", audioUrl.value.toString())
                             openAI.audio
                                 .model("whisper-1")
                                 .file(context, audioUrl.value!!)
 //                                .timestampGranularities(TimestampGranularity.WORD)
-                                .responseFormatString(ResponseFormatString.TEXT)
+//                                .responseFormatString(ResponseFormatString.TEXT)
                                 .transcription()
                                 .onStart {
                                     loading.value = true
@@ -126,7 +129,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 .collect { response ->
                                     loading.value = false
-                                    chat.value = response.toString()
+                                    chat.value = response.text.toString()
                                     Log.e("ASDF", response.toString())
                                     model.value = TTSModel.TTS1.value
                                 }
@@ -134,7 +137,17 @@ class MainActivity : ComponentActivity() {
                     }
 //                    ApiSamples(openAI, loading, modelMain, chat, model)
 
-                    if (loading.value) CircularProgressIndicator()
+                    if (loading.value) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black)
+                                .padding(20.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                        }
+                    }
                     else {
                         LazyColumn(
                             modifier = Modifier
@@ -171,9 +184,9 @@ class MainActivity : ComponentActivity() {
                             }
 
                             item {
-                                Text(
-                                    text = "user: What's the name of the capital of Bangladesh?",
-                                )
+//                                Text(
+//                                    text = "user: What's the name of the capital of Bangladesh?",
+//                                )
 
                                 Spacer(modifier = Modifier.height(10.dp))
                                 Text(
@@ -230,6 +243,29 @@ class MainActivity : ComponentActivity() {
     ) {
         val context = LocalContext.current
         val audioUrl = remember { mutableStateOf<Uri?>(null) }
+
+        LaunchedEffect(audioUrl.value) {
+            lifecycleScope.launch {
+                if (audioUrl.value == null) return@launch
+                openAI.audio
+                    .model("whisper-1")
+                    .file(context, audioUrl.value!!)
+                    .transcription()
+                    .onStart {
+                        loading.value = true
+                    }
+                    .catch { exception ->
+                        loading.value = false
+                        chat.value = "Failure: ${exception.message}"
+                    }
+                    .collect { response ->
+                        loading.value = false
+                        chat.value = response.text.toString()
+                        Log.e("ASDF", response.toString())
+                        model.value = TTSModel.TTS1.value
+                    }
+            }
+        }
 
         LaunchedEffect(Unit) {
             lifecycleScope.launch {
@@ -391,27 +427,30 @@ class MainActivity : ComponentActivity() {
         }
 
         Column(modifier = Modifier.padding(16.dp)) {
-            BasicTextField(
-                value = text,
-                onValueChange = { text = it },
-                modifier = Modifier.padding(bottom = 8.dp),
-                decorationBox = { innerTextField ->
-                    Row {
-                        if (text.isEmpty()) Text("Type a message...", color = Color.Gray)
-                        innerTextField()
-                    }
-                }
+            Text(
+                text = text,
             )
+//            BasicTextField(
+//                value = text,
+//                onValueChange = { text = it },
+//                modifier = Modifier.padding(bottom = 8.dp),
+//                decorationBox = { innerTextField ->
+//                    Row {
+//                        if (text.isEmpty()) Text("Type a message...", color = Color.Gray)
+//                        innerTextField()
+//                    }
+//                }
+//            )
 
             Row {
                 Button(onClick = { pickAudioLauncher.launch(arrayOf("audio/*")) }) {
 //                Button(onClick = { pickAudioLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)) }) {
                     Text("Attach Audio")
                 }
-                Button(onClick = { pickImageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-                    modifier = Modifier.padding(start = 8.dp)) {
-                    Text("Attach Image")
-                }
+//                Button(onClick = { pickImageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+//                    modifier = Modifier.padding(start = 8.dp)) {
+//                    Text("Attach Image")
+//                }
             }
 
             Button(
