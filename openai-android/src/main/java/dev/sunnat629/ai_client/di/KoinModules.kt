@@ -4,8 +4,10 @@
  * Copyright ©2024 Sunnat629.dev. All rights reserved.
  */
 
-package dev.sunnat629.ai_client
+package dev.sunnat629.ai_client.di
 
+import dev.sunnat629.ai_client.OpenAI
+import dev.sunnat629.ai_client.OpenAIImpl
 import dev.sunnat629.ai_client.apis.assistants.AssistantRepository
 import dev.sunnat629.ai_client.apis.assistants.AssistantRepositoryImpl
 import dev.sunnat629.ai_client.apis.audio.AudioRepository
@@ -34,6 +36,8 @@ import dev.sunnat629.ai_client.clients.Chat
 import dev.sunnat629.ai_client.clients.ChatImpl
 import dev.sunnat629.ai_client.clients.Embeddings
 import dev.sunnat629.ai_client.clients.EmbeddingsImpl
+import dev.sunnat629.ai_client.clients.File
+import dev.sunnat629.ai_client.clients.FileImpl
 import dev.sunnat629.ai_client.clients.Models
 import dev.sunnat629.ai_client.clients.ModelsImpl
 import dev.sunnat629.ai_client.clients.Moderations
@@ -89,6 +93,7 @@ object KoinModules {
         factory<Audio> { AudioImpl(get()) }
         factory<Chat> { ChatImpl(get()) }
         factory<Embeddings> { EmbeddingsImpl(get()) }
+        factory<File> { FileImpl(get()) }
         factory<Models> { ModelsImpl(get()) }
         factory<Moderations> { ModerationsImpl(get()) }
     }

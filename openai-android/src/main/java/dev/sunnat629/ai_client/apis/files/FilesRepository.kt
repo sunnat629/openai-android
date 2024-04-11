@@ -18,15 +18,15 @@ interface FilesRepository {
     /**
      * Uploads a file to the OpenAI API for use with various services like fine-tuning.
      *
-     * @param file The file to be uploaded.
-     * @return ApiResult<UploadFileRequest> Result of the file upload operation.
+     * @param request The require contents for the API
+     * @return FileResponse Result of the file upload operation.
      */
-    suspend fun uploadFile(file: FileResponse): UploadFileRequest
+    suspend fun uploadFile(request: UploadFileRequest, byteArray: ByteArray?): FileResponse
 
     /**
      * Retrieves a list of files previously uploaded to the OpenAI API.
      *
-     * @return ApiResult<ListFilesResponse> A list of files.
+     * @return ListFilesResponse A list of files.
      */
     suspend fun listFiles(): ListFilesResponse
 
@@ -34,7 +34,7 @@ interface FilesRepository {
      * Retrieves a specific file by its unique identifier.
      *
      * @param fileId The unique identifier of the file to retrieve.
-     * @return ApiResult<FileResponse> The requested file.
+     * @return FileResponse The requested file.
      */
     suspend fun retrieveFile(fileId: String): FileResponse
 
@@ -42,7 +42,7 @@ interface FilesRepository {
      * Deletes a specific file by its unique identifier.
      *
      * @param fileId The unique identifier of the file to delete.
-     * @return ApiResult<FileResponse> The result of the deletion operation.
+     * @return FileResponse The result of the deletion operation.
      */
     suspend fun deleteFile(fileId: String): FileResponse
 }
