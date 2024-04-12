@@ -61,6 +61,14 @@ Explore detailed wiki on how to effectively use the OpenAI API client for Androi
 - **Runs**: [API](wiki/Runs.md), [Interfaces](wiki/RunsInterfaces.md)
 - **Threads**: [API](wiki/Threads.md), [Interfaces](wiki/ThreadsInterfaces.md)
 
+## Platform Compatibility
+### 📱 Current Support:
+This library is currently available for Android. We've designed it with robust features tailored specifically for Android applications.
+
+### 🚀 Future Plans:
+We are excited to announce that soon we'll be expanding support to Kotlin Multiplatform. This update will enable developers to use our library across various platforms seamlessly, enhancing code reusability and efficiency. Stay tuned for more updates!
+
+
 ## ⭐️ Support
 
 Like what you see? Here’s how to support the project:
