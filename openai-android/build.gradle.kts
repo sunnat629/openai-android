@@ -43,7 +43,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "dev.sunnat629"
                 artifactId = "openai-android"
-                version = "0.1.0"
+                version = "0.1.2"
 
                 pom {
                     packaging = "aar"
@@ -107,4 +107,20 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+tasks.register("publishAllOpenaiAndroid") {
+    group = "publishing"
+    description = "Generates metadata, POM, and publishes all OpenaiAndroid publications locally and to other repositories."
+
+    dependsOn(
+        "generateMetadataFileForOpenaiAndroidPublication",
+        "generatePomFileForOpenaiAndroidPublication",
+        "publishOpenaiAndroidPublicationToMavenLocal",
+        "publishToMavenLocal"
+    )
+
+    doLast {
+        println("All OpenaiAndroid publications have been generated and published.")
+    }
 }
