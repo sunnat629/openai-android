@@ -2,11 +2,13 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.kotlinxSerialization)
-    id("com.google.devtools.ksp") version "1.9.23-1.0.19" apply false
+    alias(libs.plugins.ksp) apply false
+    id("maven-publish")
+
 }
 
 android {
-    namespace = "dev.sunnat629.ai_client"
+    namespace = "dev.sunnat629"
     compileSdk = 34
 
     defaultConfig {
@@ -31,6 +33,48 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("openaiAndroid") {
+                from(components["release"])
+                groupId = "dev.sunnat629"
+                artifactId = "openai-android"
+                version = "0.1.0"
+
+                pom {
+                    packaging = "aar"
+                    name.set("openai-android")
+                    description.set("Android client named openai-android for OpenAI's API, optimized for Android development, featuring coroutines support for asynchronous operations.")
+                    url.set("https://github.com/sunnat629/openai-android.git")
+                    inceptionYear.set("2024")
+
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id.set("sunnat629")
+                            name.set("Mohi us Sunnat")
+                            email.set("suncha629@gmail.com")
+                        }
+                    }
+
+                    scm {
+                        connection.set("scm:git:github.com/sunnat629/openai-android.git")
+                        developerConnection.set("scm:git:ssh://github.com/sunnat629/openai-android.git")
+                        url.set("https://github.com/sunnat629/openai-android")
+                    }
+                }
+            }
+        }
     }
 }
 
