@@ -1,6 +1,9 @@
 
-# OpenAI API Client for Android
+[![Maven Central](https://img.shields.io/maven-central/v/dev.sunnat629/openai-android?color=blue&label=Download)](https://central.sonatype.com/artifact/dev.sunnat629/openai-android)
+[![License](https://img.shields.io/github/license/sunnat629/openai-android?color=yellow)](LICENSE)
 
+
+# OpenAI API Client for Android
 
 Android client named `openai-android` for [OpenAI's API](https://platform.openai.com/docs/api-reference), optimized for Android development, featuring coroutines support for asynchronous operations.
 
@@ -11,8 +14,12 @@ Android client named `openai-android` for [OpenAI's API](https://platform.openai
 For Android projects, Add the OpenAI API Android client to your project by inserting the following dependency in your `build.gradle.kts` file. it's straightforward to set up the client using Gradle:
 
 ```kotlin
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    implementation("dev.sunnat629.ai_client:openai-android:1.0.0")
+    implementation("dev.sunnat629:openai-android:0.1.2")
 }
 ```
 
@@ -54,9 +61,13 @@ Explore detailed wiki on how to effectively use the OpenAI API client for Androi
 - **Runs**: [API](wiki/Runs.md), [Interfaces](wiki/RunsInterfaces.md)
 - **Threads**: [API](wiki/Threads.md), [Interfaces](wiki/ThreadsInterfaces.md)
 
-## ℹ️ Sample Apps
+## Platform Compatibility
+### 📱 Current Support:
+This library is currently available for Android. We've designed it with robust features tailored specifically for Android applications.
 
-Check out `sample` directory for Android example apps. Instructions on how to run them are in the [README](sample/README.md).
+### 🚀 Future Plans:
+We are excited to announce that soon we'll be expanding support to Kotlin Multiplatform. This update will enable developers to use our library across various platforms seamlessly, enhancing code reusability and efficiency. Stay tuned for more updates!
+
 
 ## ⭐️ Support
 
