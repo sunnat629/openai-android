@@ -48,10 +48,10 @@ Explore detailed wiki on how to effectively use the OpenAI API client for Androi
 - **Chat**: [API](wiki/Chat.md), [Interfaces](wiki/ChatInterfaces.md)
 - **Models**: [API](wiki/Models.md), [Interfaces](wiki/ModelsInterfaces.md)
 - **Moderations** [API](wiki/Moderations.md), [Interfaces](wiki/ModerationsInterfaces.md)
+- **Audio**: [API](wiki/Audio.md), [Interfaces](wiki/AudioInterfaces.md)
 
 #### Upcoming
 
-- **Audio**: [API](wiki/Audio.md), [Interfaces](wiki/AudioInterfaces.md)
 - **Assistants**: [API](wiki/Assistants.md), [Interfaces](wiki/AssistantsInterfaces.md)
 - **Embeddings**: [API](wiki/Embeddings.md), [Interfaces](wiki/EmbeddingsInterfaces.md)
 - **Files**: [API](wiki/Files.md), [Interfaces](wiki/FilesInterfaces.md)
